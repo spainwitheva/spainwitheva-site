@@ -432,7 +432,3 @@ export function SpainWithEvaPage({ locale }: { locale: Locale }) {
     </main>
   );
 }
-
-export default function Home() {
-  return <SpainWithEvaPage locale="ru" />;
-}
