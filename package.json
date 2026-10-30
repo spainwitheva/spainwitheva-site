@@ -9,7 +9,7 @@
     "install:ci": "bash scripts/install-ci.sh",
     "dev": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vite",
     "build": "bash scripts/build-verified.sh",
-    "export": "tsc --noEmit -p tsconfig.static.json && STATIC_EXPORT=1 next build && node scripts/verify-static-export.mjs",
+    "export": "tsc --noEmit -p tsconfig.static.json && STATIC_EXPORT=1 next build && cp public/.htaccess out/.htaccess && node scripts/verify-static-export.mjs",
     "start": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext start",
     "test": "npm run build && node --test tests/rendered-html.test.mjs",
     "validate:artifact": "bash scripts/validate-artifact.sh",
