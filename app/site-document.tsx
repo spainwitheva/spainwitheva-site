@@ -1,18 +1,7 @@
-import type { Metadata } from "next";
+import type { ReactNode } from "react";
+import type { Locale } from "./translations";
+import { businessJsonLd } from "./seo";
 import "./globals.css";
-
-export const metadata: Metadata = {
-  title: "SpainWithEva — экскурсии и авторские туры по Испании",
-  description:
-    "Нескучные экскурсии в Мадриде и по всей Испании, авторские туры, Путь Сантьяго и организация отдыха под ключ.",
-  other: {
-    "codex-preview": "development",
-  },
-  icons: {
-    icon: "/favicon.png",
-    shortcut: "/favicon.png",
-  },
-};
 
 const consentDefaults = `
 window.dataLayer = window.dataLayer || [];
@@ -40,16 +29,24 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-524KLVGG');
 `;
 
-export default function RootLayout({
+export function SiteDocument({
+  locale,
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  locale: Locale;
+  children: ReactNode;
+}) {
+  const jsonLd = JSON.stringify(businessJsonLd()).replace(/</g, "\\u003c");
+
   return (
-    <html lang="ru">
+    <html lang={locale}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: consentDefaults }} />
         <script dangerouslySetInnerHTML={{ __html: tagManagerLoader }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: jsonLd }}
+        />
       </head>
       <body>
         <noscript>
