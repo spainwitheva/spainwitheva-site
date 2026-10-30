@@ -1,0 +1,50 @@
+# ==== SpainWithEva: redirects from the old site (WordPress 2025 + old site 2023) ====
+# Put at the TOP of public_html/.htaccess. All URLs below were found in the
+# Wayback Machine and the old sitemap_index.xml. Nothing here touches the new
+# pages /, /uk/, /en/, /es/, /_next/, /images/, robots.txt, sitemap.xml, favicon.
+
+ErrorDocument 404 /404.html
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# 0a) Old WordPress ?p=123 / ?page_id=123 links -> clean home
+RewriteCond %{QUERY_STRING} (^|&)(p|page_id)=\d+ [NC]
+RewriteRule ^$ /? [R=301,L]
+
+# 0) Never rewrite real files or folders of the new static site.
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# 1) WordPress junk: login, admin, API, feeds, cart, test pages -> 410 Gone
+RewriteRule ^(wp-admin|wp-includes|wp-json|xmlrpc\.php|wp-login\.php) - [G,L]
+RewriteRule ^(cart|checkout|my-account|sample-page|bronirovanie-test|author/dev)/?$ - [G,L]
+RewriteRule ^(comments/)?feed/?$ - [G,L]
+# Old uploaded images/files: gone
+RewriteRule ^wp-content/ - [G,L]
+
+# 2) Old sitemaps -> new sitemap (so Google picks up the new one)
+RewriteRule ^(sitemap_index|post-sitemap|page-sitemap|product-sitemap|product_cat-sitemap|category-sitemap|author-sitemap|ae_global_templates-sitemap)\.xml$ /sitemap.xml [R=301,L]
+
+# 3) Old Madrid and Toledo tour URLs -> their own pages.
+#    Real files and folders are already served by the rule above.
+RewriteRule ^product/dushevnyj-madrid- /ekskursii/madrid/ [R=301,L,NC]
+RewriteRule ^product/aristokratichnyj-madrid/?$ /ekskursii/madrid/ [R=301,L,NC]
+RewriteRule ^dushevnyj-madrid-zcbf0v/?$ /ekskursii/madrid/ [R=301,L,NC]
+RewriteRule ^ekskursii-po-madridu-pogruzhenie-v-serdcze-ispanskoj-stoliczy/?$ /ekskursii/madrid/ [R=301,L,NC]
+RewriteRule ^product/toledo-pervaya-stolicza-ispanii- /ekskursii/toledo/ [R=301,L,NC]
+RewriteRule ^toledo-pervaya-stolica-ispanii-zlltdn/?$ /ekskursii/toledo/ [R=301,L,NC]
+
+# 4) WooCommerce tours, tour categories, shop, blog category -> RU home
+#    (later: point the best ones to new tour pages, see old-urls.csv)
+RewriteRule ^(product|product-category|shop|category)/ / [R=301,L,NC]
+RewriteRule ^shop/?$ / [R=301,L,NC]
+
+# 5) Old English pages (2023 site) -> /en/
+RewriteRule ^(?:en/about-us|en/andalucia-trip|en/blog|en/galicia-trip-to-the-edge-of-the-world|en/museum|en/planning|en/premium-tours|en/residence|en/services|en/the-basque-country-and-cantabria-north-of-spain|en/tours|en/valladolid|soulful-madrid-the-first-time-in-the-spanish-capital-zllj2f)/?$ /en/ [R=301,L,NC]
+
+# 6) Old Russian pages, articles, services (2023 + 2025) -> /
+RewriteRule ^(?:about|andalusiya-puteshestvie-v-samyj-strastnyj-region-ispanii1|aranhuez-letnyaya-korolevskaya-rezidenciya-z0ivko|aristokratichnyj-madrid-za1xe6|barselona-znakomstvo-s-kataloniej-zwyl9t|besplatnyj-gajd-po-madridu-i-podmadridyu-zibnjb|blog|blog1|ctudencheskij-vnzh-v-ispanii-zemp6y|en/andalusiya-puteshestvie-v-samyj-strastnyj-region-ispanii|en/galisiya-puteshestvie-na-kraj-sveta|en/page-z7jawd|en/strana-baskov-i-kantabriya-sever-ispanii|foto-i-video-soprovozhdenie-vo-vremya-ekskursii-zcpkvd|galisiya-puteshestvie-na-kraj-sveta1|izyskannyj-madrid--zn1bli|kanal-youtube|karta|madrid-i-ego-okrestnosti-istoricheskie-goroda-kotorye-stoit-posetit|madrid-zgwws0|museum1|nedvizhimost|netipichnye-dostoprimechatelnosti-madrida|novosti|o-nas|otzyvy|planirovanie-otdyha|poluchenie-studencheskoj-vizy|premium|premium-gajd-po-madridu-z8ecan|privacy-policy|professionalnaya-fotosessiya-v-madride--zkyg1u|salamanka-kolybel-vechnoj-molodosti-z9rhxh|segoviya-zimnyaya-korolevskaya-rezidenciya-zcpjrh|services|services1|sever-ispanii-galisiya-strana-baskov-i-kantabriya-idealnye-mesta-dlya-puteshestvij|shop|shopping-soprovozhdenie--z1lny8|strana-baskov-i-kantabriya-sever-ispanii1|svobodnyj-madrid--zh8sch|tours1|valensiya-iskusstvo-more-i-paelya-zrvfpj|valyadolid-gedonizm-i-radost-zhizni|valyadolid-gorod-aristokratov-z5etyu|vicza-czifrovogo-kochevnika|vintazhnyj-madrid-zhfd1h|vkusnyj-madrid-znaexx|vnzh)/?$ / [R=301,L,NC]
+</IfModule>
+# ==== end SpainWithEva redirects ====
