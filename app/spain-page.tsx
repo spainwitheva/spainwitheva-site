@@ -23,11 +23,22 @@ export function SpainWithEvaPage({
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [showCompanyVideo, setShowCompanyVideo] = useState(false);
   const spainCarouselRef = useRef<HTMLDivElement>(null);
-  const allSpainTours = [
+  const repeatedOnRussianCatalog = new Set([
+    "Душевный Мадрид",
+    "Изысканный Мадрид",
+    "Аристократичный Мадрид",
+    "Вкусный Мадрид",
+    "Толедо: первая столица Испании",
+    "Сеговия: акведук и королевский Алькасар",
+  ]);
+  const catalogTours = [
     ...madridTours.map(({ title, duration, text }) => ({ city: "Мадрид", title, duration, text })),
     ...madridCatalogTours,
     ...spainTours,
   ];
+  const allSpainTours = locale === "ru"
+    ? catalogTours.filter((tour) => !repeatedOnRussianCatalog.has(tour.title))
+    : catalogTours;
   const matchingSpainTours = activeRegion === "Все регионы"
     ? allSpainTours
     : allSpainTours.filter((tour) => tour.city === activeRegion);
@@ -115,7 +126,7 @@ export function SpainWithEvaPage({
             {t("Нескучные экскурсии, авторские туры и путешествия под ключ от Евы Сытиной и команды SpainWithEva.")}
           </p>
           <div className="hero-actions">
-            <a className="button button-primary" href="#journeys">{t("Выбрать путешествие")}</a>
+            <a className="button button-primary" href={locale === "ru" ? "/ekskursii/" : "#journeys"}>{t("Выбрать путешествие")}</a>
             <a className="button button-outline" href={whatsappUrl} target="_blank" rel="noreferrer">
               {t("Написать в WhatsApp")}
             </a>
@@ -176,32 +187,36 @@ export function SpainWithEvaPage({
       </section>
 
       <section className="section tour-section">
-        <div className="section-heading compact-heading">
-          <div>
-            <p className="eyebrow">{t("Популярные маршруты")}</p>
-            <h2>{t("Начните с Мадрида")}</h2>
-          </div>
-          <p>{t("Стоимость указана за индивидуальную экскурсию. Детали и доступность подтверждаем перед бронированием.")}</p>
-        </div>
-        <div className="tour-grid">
-          {madridTours.map((tour, index) => (
-            <article className="tour-card" key={tour.title}>
-              <div className="tour-topline">
-                <span>{t(tour.tag)}</span>
-                <span>0{index + 1}</span>
+        {locale === "ru" ? null : (
+          <>
+            <div className="section-heading compact-heading">
+              <div>
+                <p className="eyebrow">{t("Популярные маршруты")}</p>
+                <h2>{t("Начните с Мадрида")}</h2>
               </div>
-              <h3>{t(tour.title)}</h3>
-              <p>{t(tour.text)}</p>
-              <div className="tour-meta">
-                <span>{t(tour.duration)}</span>
-                <strong>{formatPrice(locale, tour.priceKey)}</strong>
-              </div>
-              <a href={whatsappUrl} target="_blank" rel="noreferrer" aria-label={`Узнать о маршруте ${tour.title}`}>
-                {t("Узнать детали")} <Arrow />
-              </a>
-            </article>
-          ))}
-        </div>
+              <p>{t("Стоимость указана за индивидуальную экскурсию. Детали и доступность подтверждаем перед бронированием.")}</p>
+            </div>
+            <div className="tour-grid">
+              {madridTours.map((tour, index) => (
+                <article className="tour-card" key={tour.title}>
+                  <div className="tour-topline">
+                    <span>{t(tour.tag)}</span>
+                    <span>0{index + 1}</span>
+                  </div>
+                  <h3>{t(tour.title)}</h3>
+                  <p>{t(tour.text)}</p>
+                  <div className="tour-meta">
+                    <span>{t(tour.duration)}</span>
+                    <strong>{formatPrice(locale, tour.priceKey)}</strong>
+                  </div>
+                  <a href={whatsappUrl} target="_blank" rel="noreferrer" aria-label={`Узнать о маршруте ${tour.title}`}>
+                    {t("Узнать детали")} <Arrow />
+                  </a>
+                </article>
+              ))}
+            </div>
+          </>
+        )}
         <article className="photo-option">
           <div className="photo-option-intro">
             <p className="eyebrow">{t("Дополнить экскурсию")}</p>

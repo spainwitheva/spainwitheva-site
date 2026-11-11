@@ -28,56 +28,72 @@ function CardMedia({ card }: { card: TourCardData }) {
   );
 }
 
-function CardBody({ card, linked }: { card: TourCardData; linked: boolean }) {
+function TourCard({ card }: { card: TourCardData }) {
+  const href = card.href ?? waLink(card.waText);
+  const external = !card.href;
   return (
-    <>
-      <div className="tour-link-media">
+    <article className="tour-link-card">
+      <div className="tour-link-media" data-photo-slot={card.id}>
         <CardMedia card={card} />
       </div>
       <div className="tour-link-body">
         <h3>{card.title}</h3>
         <p className="tour-link-why">{card.why}</p>
         <p className="tour-link-meta">{card.meta}</p>
-        <p className="tour-link-eva">{evaSurcharge}</p>
-        {linked ? <span className="tour-link-more">Подробнее</span> : (
-          <a className="button button-primary tour-wa" href={waLink(card.waText)} target="_blank" rel="noopener noreferrer">
-            Написать в WhatsApp
-          </a>
-        )}
+        <a
+          className="tour-link-more"
+          href={href}
+          {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+        >
+          Подробнее
+        </a>
+      </div>
+    </article>
+  );
+}
+
+function GroupBody({ cards }: { cards: TourCardData[] }) {
+  return (
+    <>
+      <p className="tour-group-eva">{evaSurcharge}</p>
+      <div className="tour-link-grid">
+        {cards.map((card) => (
+          <TourCard card={card} key={card.id} />
+        ))}
       </div>
     </>
   );
 }
 
-function TourCard({ card }: { card: TourCardData }) {
-  if (card.href) {
-    return (
-      <a className="tour-link-card" href={card.href}>
-        <CardBody card={card} linked />
-      </a>
-    );
-  }
-  return (
-    <article className="tour-plain-card">
-      <CardBody card={card} linked={false} />
-    </article>
-  );
-}
-
-export function TourCardGrid({ groupHeading }: { groupHeading: "h2" | "p" }) {
+export function TourCardGrid({
+  groupHeading,
+  accordion = false,
+}: {
+  groupHeading: "h2" | "p";
+  accordion?: boolean;
+}) {
   const Heading = groupHeading;
   return (
     <div className="tour-groups">
-      {cardGroups.map((group) => (
-        <div key={group.title}>
-          <Heading className="tour-group-title">{group.title}</Heading>
-          <div className="tour-link-grid">
-            {group.cards.map((card) => (
-              <TourCard card={card} key={card.id} />
-            ))}
-          </div>
-        </div>
-      ))}
+      {cardGroups.map((group, index) => {
+        const title = <Heading className="tour-group-title">{group.title}</Heading>;
+        if (!accordion) {
+          return (
+            <div className="tour-group" key={group.title}>
+              {title}
+              <GroupBody cards={group.cards} />
+            </div>
+          );
+        }
+        return (
+          <details className="tour-group" key={group.title} open={index === 0 ? true : undefined}>
+            <summary>
+              <span className="tour-group-title">{group.title}</span>
+            </summary>
+            <GroupBody cards={group.cards} />
+          </details>
+        );
+      })}
     </div>
   );
 }
@@ -90,7 +106,7 @@ export function HomeTourStrip() {
         <GoogleRatingBadge />
         <a href="/ekskursii/">Все экскурсии</a>
       </div>
-      <TourCardGrid groupHeading="p" />
+      <TourCardGrid groupHeading="p" accordion />
       <p className="home-tours-note">{otherCitiesNote}</p>
     </section>
   );

@@ -467,7 +467,8 @@ export const cardGroups: Array<{ title: string; cards: TourCardData[] }> = [
         title: "Аранхуэс",
         why: "Летняя королевская резиденция.",
         meta: "полный день · от 450 € + билеты на поезд",
-        photo: { alt: "", fallback: "Аранхуэс" },
+        // Placeholder frame. Set photo.src, alt, width and height to swap in the real picture.
+        photo: { alt: "Аранхуэс", fallback: "Аранхуэс" },
         waText: formatWa("Аранхуэс"),
       },
       {
@@ -475,7 +476,8 @@ export const cardGroups: Array<{ title: string; cards: TourCardData[] }> = [
         title: "Эскориал и Долина Павших",
         why: "Выезд из Мадрида на целый день.",
         meta: "полный день · от 450 € + билеты на поезд",
-        photo: { alt: "", fallback: "Эскориал и Долина Павших" },
+        // Placeholder frame. Set photo.src, alt, width and height to swap in the real picture.
+        photo: { alt: "Эскориал и Долина Павших", fallback: "Эскориал и Долина Павших" },
         waText: formatWa("Эскориал и Долина Павших"),
       },
     ],

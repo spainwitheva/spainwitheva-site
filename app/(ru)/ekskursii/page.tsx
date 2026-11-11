@@ -13,7 +13,7 @@ export default function ExcursionsIndex() {
     <main className="tp" id="top" lang="ru">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} />
       <TourHeader index />
-      <article className="tp-wrap">
+      <article className="tp-catalog">
         <nav className="tp-crumbs" aria-label="Хлебные крошки">
           <ol>
             <li><a href="/">Главная</a></li>
