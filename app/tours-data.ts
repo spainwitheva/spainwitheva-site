@@ -1,11 +1,11 @@
 import { siteContacts } from "./site-content";
-import type { GoogleReview } from "./reviews";
-import { madridPageReviews, toledoReviews } from "./reviews";
+import type { TourQuote } from "./reviews";
+import { madridQuote, toledoQuote } from "./reviews";
 
 /**
  * Факты каталога владельца, октябрь 2026.
  * Цены ниже за гида команды. Лично с Евой +50 €.
- * Отзывы берутся из reviews.ts.
+ * Короткие цитаты берутся из reviews.ts.
  */
 
 export const evaSurcharge = "лично с Евой +50 €";
@@ -105,7 +105,7 @@ export type TourPageData = {
   formats?: FormatLine[];
   extras?: string;
   evaLines: string[];
-  reviews: GoogleReview[];
+  quote: TourQuote;
   related: Array<{ href: string; title: string; meta: string }>;
 };
 
@@ -245,7 +245,7 @@ export const tourPages: TourPageData[] = [
       "Я Ева, живу в Мадриде и вожу по нему сама.",
       "Историю рассказываю вживую, с паузами на красивое и вкусное.",
     ],
-    reviews: madridPageReviews,
+    quote: madridQuote,
     related: [
       {
         href: "/ekskursii/toledo/",
@@ -347,7 +347,7 @@ export const tourPages: TourPageData[] = [
       "Я Ева. Этот выезд в Толедо веду сама.",
       "К 17:00 возвращаемся в Мадрид.",
     ],
-    reviews: toledoReviews,
+    quote: toledoQuote,
     related: [
       {
         href: "/ekskursii/madrid/",
