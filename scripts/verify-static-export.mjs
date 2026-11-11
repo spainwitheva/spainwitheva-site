@@ -477,6 +477,42 @@ await check("tour pages", async () => {
   assert.ok(index.includes('href="/ekskursii/madrid/"'));
   assert.ok(index.includes('href="/ekskursii/toledo/"'));
   assert.equal(index.includes("hreflang="), false);
+  assert.ok(index.includes("по всей Испании"));
+  assert.ok(index.includes("Другие города Испании"));
+  assert.ok(index.includes("Стадион и музей Real Madrid"));
+  assert.ok(index.includes("Puy du Fou: история оживает"));
+  assert.ok(index.includes("Обзорная Барселона"));
+  assert.ok(index.includes("Валенсия на пересечении эпох"));
+  assert.ok(index.includes("Цена по запросу"));
+  assert.equal(index.includes("Севиль"), false);
+  assert.equal(index.includes('class="tour-fallback"'), false);
+  const catalogHrefs = [...index.matchAll(/href="([^"]+)"/g)]
+    .map((match) => decode(match[1]))
+    .filter((href) => href.includes("wa.me") || href.startsWith("/ekskursii/"))
+    .map((href) => decodeURIComponent(href));
+  assert.ok(
+    catalogHrefs.some((href) => href.includes("Здравствуйте! Интересует экскурсия: Музей Прадо")),
+    "missing Prado WhatsApp inquiry",
+  );
+  assert.ok(
+    catalogHrefs.some((href) => href.startsWith("https://wa.me/34684762085?text=")),
+    "missing WhatsApp catalog link",
+  );
+  const indexLd = jsonLdBlocks(index).find((block) => Array.isArray(block["@graph"]));
+  assertNoReviewMarkup(indexLd, "catalog index");
+  const itemList = indexLd["@graph"].find((node) => node["@type"] === "ItemList");
+  assert.equal(itemList.itemListElement[0].name, "Душевный Мадрид");
+  assert.equal(itemList.itemListElement[0].url, "https://spainwitheva.com/ekskursii/madrid/");
+  assert.equal(itemList.itemListElement[1].name, "Толедо");
+  assert.equal(itemList.itemListElement[1].url, "https://spainwitheva.com/ekskursii/toledo/");
+  assert.ok(itemList.itemListElement.length > 2);
+  assert.ok(itemList.itemListElement.some((item) => item.name === "Стадион и музей Real Madrid"));
+  assert.equal(home.includes('href="/ekskursii/#'), true);
+  assert.equal(english.includes('href="/ekskursii/#'), false);
+  for (const file of ["uk/index.html", "es/index.html"]) {
+    const html = await readFile(path.join(root, file), "utf8");
+    assert.equal(html.includes('href="/ekskursii/#'), false, file);
+  }
 });
 
 await check("article pages", async () => {

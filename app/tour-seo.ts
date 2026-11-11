@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { catalogAdditions } from "./catalog-index";
 import { SITE_ORIGIN } from "./seo";
 import type { TourPageData } from "./tours-data";
 
@@ -42,7 +43,7 @@ export function tourMetadata(tour: TourPageData): Metadata {
 export function indexMetadata(): Metadata {
   const title = "Экскурсии по Мадриду и поездки из Мадрида с русскоязычным гидом | SpainWithEva";
   const description =
-    "Индивидуальные экскурсии с гидом SpainWithEva: Душевный Мадрид от 200 €, Толедо от 450 € плюс билеты на поезд. Лично с Евой +50 €.";
+    "Индивидуальные экскурсии с гидом SpainWithEva по всей Испании: Душевный Мадрид от 200 €, Толедо от 450 € плюс билеты на поезд. Лично с Евой +50 €.";
   const url = `${SITE_ORIGIN}/ekskursii/`;
   const image = "https://spainwitheva.com/images/hero-eva-madrid.webp";
 
@@ -161,6 +162,12 @@ export function indexJsonLd() {
             name: "Толедо",
             url: `${SITE_ORIGIN}/ekskursii/toledo/`,
           },
+          ...catalogAdditions.map((item, index) => ({
+            "@type": "ListItem",
+            position: index + 3,
+            name: item.title,
+            url: `${SITE_ORIGIN}/ekskursii/#${item.id}`,
+          })),
         ],
       },
       {
