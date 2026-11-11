@@ -449,8 +449,15 @@ await check("article pages", async () => {
   assert.ok(article.includes('href="/stati/"'));
   assert.ok(article.includes("Написать в WhatsApp"));
   assert.ok(article.includes('class="tp-cta"'));
-  assert.ok(article.includes('loading="lazy"'));
-  assert.ok(article.includes("/images/tours/madrid/almudena-palace-outside.webp"));
+  const hero = "https://spainwitheva.com/images/articles/madrid-balcony-plaza-mayor.webp";
+  const heroAlt = "Гости с Евой на балконе над Пласа Майор в Мадриде";
+  assert.equal(metaContent(article, "og:image", "property"), hero);
+  assert.equal(metaContent(article, "og:image:alt", "property"), heroAlt);
+  assert.ok(article.includes('loading="eager"'));
+  assert.ok(/fetchpriority="high"/i.test(article));
+  assert.equal(/<img\b[^>]*loading="lazy"/i.test(article), false);
+  assert.ok(article.includes("/images/articles/madrid-balcony-plaza-mayor.webp"));
+  assert.ok(article.includes(`alt="${heroAlt}"`));
   assert.ok(article.includes("Их сделала семья Руис де Луна"));
   assert.equal(article.includes("не для публикации"), false);
   assert.equal(article.includes("SEO-заголовок"), false);
@@ -463,6 +470,7 @@ await check("article pages", async () => {
   assert.equal(articleLd.inLanguage, "ru");
   assert.equal(articleLd.author.name, "Eva Sytina");
   assert.equal(articleLd.publisher.name, "SpainWithEva");
+  assert.equal(articleLd.image, hero);
   assert.equal(crumbs["@type"], "BreadcrumbList");
   assert.equal(crumbs.itemListElement.length, 3);
   assert.equal(crumbs.itemListElement[1].name, "Статьи");
@@ -471,6 +479,9 @@ await check("article pages", async () => {
   assert.ok(index.includes("Что посмотреть в Мадриде за 1–2 дня"));
   assert.ok(index.includes(description));
   assert.ok(index.includes('href="/stati/chto-posmotret-v-madride-za-1-2-dnya/"'));
+  assert.ok(index.includes("/images/articles/madrid-balcony-plaza-mayor.webp"));
+  assert.ok(index.includes(heroAlt));
+  assert.ok(index.includes('loading="lazy"'));
   assert.ok(index.includes("11 ноября 2026"));
   assert.match(index, /<html[^>]*\slang=["']ru["']/i);
 });

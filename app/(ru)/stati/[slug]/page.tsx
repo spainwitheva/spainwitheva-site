@@ -59,8 +59,9 @@ export default async function ArticlePage({ params }: Props) {
               alt={article.image.alt}
               width={article.image.width}
               height={article.image.height}
-              loading="lazy"
+              loading="eager"
               decoding="async"
+              fetchPriority="high"
             />
           </figure>
         ) : null}

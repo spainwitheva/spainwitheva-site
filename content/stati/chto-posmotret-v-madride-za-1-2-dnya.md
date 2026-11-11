@@ -2,10 +2,10 @@
 seoTitle: Что посмотреть в Мадриде за 1–2 дня: маршрут Евы
 description: Пеший маршрут по Мадриду на 1–2 дня от гида Евы: куда идти по центру, где поесть без туристических ловушек и что оставить на второй день.
 date: 2026-11-11
-image: /images/tours/madrid/almudena-palace-outside.webp
-imageAlt: Гости экскурсии у собора Альмудена и Королевского дворца снаружи
-imageWidth: 1600
-imageHeight: 900
+image: /images/articles/madrid-balcony-plaza-mayor.webp
+imageAlt: Гости с Евой на балконе над Пласа Майор в Мадриде
+imageWidth: 1200
+imageHeight: 675
 ---
 # Что посмотреть в Мадриде за 1–2 дня
 
