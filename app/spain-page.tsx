@@ -71,10 +71,10 @@ export function SpainWithEvaPage({
         </a>
         <nav className="desktop-nav" aria-label={t("Основная навигация")}>
           <a href="#excursions">{t("Экскурсии")}</a>
-          {locale === "ru" ? <a href="/stati/">Статьи</a> : null}
           <a href="#spain">{t("Туры по Испании")}</a>
           <a href="#camino">{t("Путь Сантьяго")}</a>
           <a href="#services">{t("Отдых под ключ")}</a>
+          {locale === "ru" ? <a href="/stati/">Статьи</a> : null}
           <a href="#about">{t("О нас")}</a>
         </nav>
         <div className="header-tools">
@@ -97,10 +97,10 @@ export function SpainWithEvaPage({
           <summary aria-label={t("Открыть меню")}><span></span><span></span></summary>
           <nav aria-label={t("Мобильная навигация")}>
             <a href="#excursions">{t("Экскурсии")}</a>
-            {locale === "ru" ? <a href="/stati/">Статьи</a> : null}
             <a href="#spain">{t("Туры по Испании")}</a>
             <a href="#camino">{t("Путь Сантьяго")}</a>
             <a href="#services">{t("Отдых под ключ")}</a>
+            {locale === "ru" ? <a href="/stati/">Статьи</a> : null}
             <a href="#about">{t("О нас")}</a>
             <a href={whatsappUrl} target="_blank" rel="noreferrer">{t("Написать в WhatsApp")}</a>
           </nav>
