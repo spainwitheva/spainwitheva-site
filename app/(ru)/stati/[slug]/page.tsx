@@ -14,6 +14,18 @@ import { waLink } from "../../../tours-data";
 
 type Props = { params: Promise<{ slug: string }> };
 
+const MADRID_ARTICLE_SLUG = "chto-posmotret-v-madride-za-1-2-dnya";
+
+function splitIntro(markdown: string) {
+  const parts = markdown.replace(/\r\n/g, "\n").trim().split(/\n{2,}/);
+  const headingAt = parts.findIndex((block) => /^#{1,3} /.test(block.trim()));
+  if (headingAt <= 0) return { intro: markdown, rest: "" };
+  return {
+    intro: parts.slice(0, headingAt).join("\n\n"),
+    rest: parts.slice(headingAt).join("\n\n"),
+  };
+}
+
 export function generateStaticParams() {
   return getArticles().map((article) => ({ slug: article.slug }));
 }
@@ -33,6 +45,7 @@ export default async function ArticlePage({ params }: Props) {
   if (!article) notFound();
   const jsonLd = JSON.stringify(articleJsonLd(article)).replace(/</g, "\\u003c");
   const wa = waLink(whatsappMessages.ru);
+  const madridIntro = article.slug === MADRID_ARTICLE_SLUG ? splitIntro(article.body) : null;
 
   return (
     <main className="tp" id="top" lang="ru">
@@ -66,9 +79,28 @@ export default async function ArticlePage({ params }: Props) {
           </figure>
         ) : null}
 
-        <div className="article-body">
-          <ArticleBody markdown={article.body} />
-        </div>
+        {madridIntro ? (
+          <>
+            <div className="article-body">
+              <ArticleBody markdown={madridIntro.intro} />
+            </div>
+            <section className="tp-cta article-early-cta">
+              <h2>Пройти центр с гидом</h2>
+              <p>Это маршрут прогулки «Душевный Мадрид»: около 3 часов, пешком.</p>
+              <div className="article-cta-actions">
+                <a className="button button-primary" href="/ekskursii/madrid/">Экскурсия по Мадриду</a>
+                <a className="button button-primary" href={wa} target="_blank" rel="noopener noreferrer">Написать в WhatsApp</a>
+              </div>
+            </section>
+            <div className="article-body">
+              <ArticleBody markdown={madridIntro.rest} />
+            </div>
+          </>
+        ) : (
+          <div className="article-body">
+            <ArticleBody markdown={article.body} />
+          </div>
+        )}
 
         <section className="tp-cta">
           <h2>Написать Еве</h2>

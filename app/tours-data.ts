@@ -467,7 +467,12 @@ export const cardGroups: Array<{ title: string; cards: TourCardData[] }> = [
         title: "Аранхуэс",
         why: "Летняя королевская резиденция.",
         meta: "полный день · от 450 € + билеты на поезд",
-        photo: { alt: "", fallback: "Аранхуэс" },
+        photo: {
+          src: "/images/tours/cards/aranjuez-card.webp",
+          alt: "Ева в шляпе перед аркадами Королевского дворца в Аранхуэсе",
+          width: 1200,
+          height: 800,
+        },
         waText: formatWa("Аранхуэс"),
       },
       {
@@ -475,7 +480,12 @@ export const cardGroups: Array<{ title: string; cards: TourCardData[] }> = [
         title: "Эскориал и Долина Павших",
         why: "Выезд из Мадрида на целый день.",
         meta: "полный день · от 450 € + билеты на поезд",
-        photo: { alt: "", fallback: "Эскориал и Долина Павших" },
+        photo: {
+          src: "/images/tours/cards/escorial-card.webp",
+          alt: "Ева во дворе монастыря Эскориал, на фоне базилики",
+          width: 1200,
+          height: 800,
+        },
         waText: formatWa("Эскориал и Долина Павших"),
       },
     ],

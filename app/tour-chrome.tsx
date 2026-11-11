@@ -12,10 +12,10 @@ export function TourHeader({ index, articles }: { index?: boolean; articles?: bo
       </a>
       <nav className="desktop-nav" aria-label="Основная навигация">
         <a href="/ekskursii/" aria-current={index ? "page" : undefined}>Экскурсии</a>
-        <a href="/stati/" aria-current={articles ? "page" : undefined}>Статьи</a>
         <a href="/#spain">Туры по Испании</a>
         <a href="/#camino">Путь Сантьяго</a>
         <a href="/#services">Отдых под ключ</a>
+        <a href="/stati/" aria-current={articles ? "page" : undefined}>Статьи</a>
         <a href="/#about">О нас</a>
       </nav>
       <div className="header-tools">
@@ -38,10 +38,10 @@ export function TourHeader({ index, articles }: { index?: boolean; articles?: bo
         <summary aria-label="Открыть меню"><span></span><span></span></summary>
         <nav aria-label="Мобильная навигация">
           <a href="/ekskursii/">Экскурсии</a>
-          <a href="/stati/">Статьи</a>
           <a href="/#spain">Туры по Испании</a>
           <a href="/#camino">Путь Сантьяго</a>
           <a href="/#services">Отдых под ключ</a>
+          <a href="/stati/">Статьи</a>
           <a href="/#about">О нас</a>
           <a href={headerWa} target="_blank" rel="noopener noreferrer">Написать в WhatsApp</a>
         </nav>

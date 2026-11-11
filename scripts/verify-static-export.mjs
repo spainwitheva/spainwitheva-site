@@ -576,7 +576,13 @@ await check("no unfinished placeholders", async () => {
     assert.ok(html.includes("/images/tours/cards/madrid-v-bokale.webp"));
     assert.ok(html.includes("/images/tours/cards/aristokratichnyj-madrid.webp"));
     assert.ok(html.includes("/images/tours/cards/segovia-aqueduct.webp"));
-    assert.ok(html.includes('class="tour-fallback"'));
+    assert.ok(html.includes("/images/tours/cards/aranjuez-card.webp"));
+    assert.ok(html.includes("/images/tours/cards/escorial-card.webp"));
+    assert.ok(html.includes('alt="Ева в шляпе перед аркадами Королевского дворца в Аранхуэсе"'));
+    assert.ok(html.includes('alt="Ева во дворе монастыря Эскориал, на фоне базилики"'));
+    assert.ok(html.includes('width="1200"'));
+    assert.ok(html.includes('height="800"'));
+    assert.equal(html.includes('class="tour-fallback"'), false);
     assert.ok(html.includes('loading="lazy"'));
   }
 });
