@@ -1,4 +1,4 @@
-import { ReviewStrip } from "./review-strip";
+import { GoogleReviewsBlock } from "./review-strip";
 import { TourFooter, TourHeader } from "./tour-chrome";
 import { tourJsonLd } from "./tour-seo";
 import {
@@ -142,8 +142,6 @@ export function TourPageView({ tour }: { tour: TourPageData }) {
           </div>
         </section>
 
-        <ReviewStrip reviews={tour.reviews} />
-
         <section className="tp-block">
           <h2>Вопросы</h2>
           <div className="faq-list">
@@ -171,6 +169,8 @@ export function TourPageView({ tour }: { tour: TourPageData }) {
             {tour.extras ? <p className="tp-extras">{tour.extras}</p> : null}
           </section>
         ) : null}
+
+        <GoogleReviewsBlock reviews={tour.reviews} className="tp-block tp-reviews" />
 
         <section className="tp-cta">
           <h2>Написать Еве</h2>
