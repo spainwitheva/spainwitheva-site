@@ -379,9 +379,11 @@ footer > p { justify-self: end; margin: 8px 0; }
 .tour-link-grid { display: grid; gap: 14px; }
 .tour-link-card, .tour-plain-card { background: var(--paper); border: 1px solid var(--soft-sand); display: flex; flex-direction: column; min-width: 0; }
 .tour-link-card { color: inherit; }
-.tour-link-media { aspect-ratio: 3 / 2; overflow: hidden; background: var(--soft-sand); }
-.tour-link-media img { width: 100%; height: 100%; object-fit: cover; object-position: center 18%; }
-.tour-ph, .tp-ph { display: grid; place-items: center; height: 100%; padding: 12px; text-align: center; color: #6a3b12; background: rgba(242, 160, 85, .18); border: 1px dashed rgba(227, 104, 0, .55); font-size: .78rem; line-height: 1.4; }
+.tour-link-media { position: relative; aspect-ratio: 3 / 2; overflow: hidden; background: var(--soft-sand); }
+.tour-fallback { position: absolute; inset: 0; }
+.tour-link-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 18%; }
+.tour-fallback { display: grid; place-items: center; width: 100%; height: 100%; padding: 18px 16px; text-align: center; color: #4a171b; background: radial-gradient(120% 90% at 15% 0%, rgba(255,255,255,.42), transparent 52%), linear-gradient(165deg, #f8d3a8 0%, #f2a055 52%, #e09245 100%); }
+.tour-fallback strong { font-family: var(--font-serif), Georgia, serif; font-weight: 400; font-size: clamp(1.25rem, 2vw, 1.65rem); line-height: 1.15; letter-spacing: -.03em; }
 .tour-link-body { padding: 14px 14px 16px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
 .tour-link-card h3, .tour-plain-card h3 { margin: 0; color: var(--wine); font-family: var(--font-serif), Georgia, serif; font-size: 1.45rem; font-weight: 400; line-height: 1.15; }
 .tour-link-why { margin: 0; color: #6e5c52; font-size: .92rem; line-height: 1.45; }

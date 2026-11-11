@@ -21,7 +21,11 @@ function CardMedia({ card }: { card: TourCardData }) {
       />
     );
   }
-  return <span className="tour-ph">{card.photo.gap}</span>;
+  return (
+    <span className="tour-fallback">
+      <strong>{card.photo.fallback}</strong>
+    </span>
+  );
 }
 
 function CardBody({ card, linked }: { card: TourCardData; linked: boolean }) {

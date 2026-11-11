@@ -15,35 +15,25 @@ import {
 } from "./tours-data";
 
 function Frame({ photo, eager }: { photo: TourPhoto; eager?: boolean }) {
-  if (photo.src) {
-    return (
-      <figure className={eager ? "tp-frame tp-hero" : "tp-frame"}>
-        <img
-          src={photo.src}
-          alt={photo.alt}
-          width={photo.width}
-          height={photo.height}
-          loading={eager ? "eager" : "lazy"}
-          decoding="async"
-          fetchPriority={eager ? "high" : undefined}
-          style={photo.position ? { objectPosition: photo.position } : undefined}
-        />
-      </figure>
-    );
-  }
+  if (!photo.src) return null;
   return (
-    <figure className="tp-frame tp-ph">
-      <span>{photo.gap}</span>
+    <figure className={eager ? "tp-frame tp-hero" : "tp-frame"}>
+      <img
+        src={photo.src}
+        alt={photo.alt}
+        width={photo.width}
+        height={photo.height}
+        loading={eager ? "eager" : "lazy"}
+        decoding="async"
+        fetchPriority={eager ? "high" : undefined}
+        style={photo.position ? { objectPosition: photo.position } : undefined}
+      />
     </figure>
   );
 }
 
 function TextBlock({ texts }: { texts: string[] }) {
-  return texts.map((text) => (
-    <p key={text} className={text.includes("[УТОЧНИТЬ:") ? "tp-gap" : undefined}>
-      {text}
-    </p>
-  ));
+  return texts.map((text) => <p key={text}>{text}</p>);
 }
 
 export function TourPageView({ tour }: { tour: TourPageData }) {
@@ -87,7 +77,7 @@ export function TourPageView({ tour }: { tour: TourPageData }) {
           <Frame photo={tour.hero} eager />
           <div className="tp-film">
             {tour.photos.map((photo) => (
-              <Frame photo={photo} key={photo.src ?? photo.gap} />
+              <Frame photo={photo} key={photo.src} />
             ))}
           </div>
           {tour.photoNote ? <p className="tp-gap">{tour.photoNote}</p> : null}

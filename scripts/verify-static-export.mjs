@@ -348,7 +348,8 @@ await check("tour pages", async () => {
   assert.equal(toledo.includes("405"), false);
 
   for (const html of [madrid, toledo]) {
-    assert.ok(html.includes("[УТОЧНИТЬ: место встречи]"));
+    assert.ok(html.includes("Место встречи согласуем в WhatsApp"));
+    assert.equal(html.includes("[УТОЧНИТЬ"), false);
     assert.ok(html.includes("лично с Евой +50 €"));
     assert.ok(html.includes("Предоплата (сумма по договорённости) входит в стоимость экскурсии"));
     assert.ok(html.includes("за 14 дней и ранее: полный возврат;"));
@@ -415,7 +416,11 @@ await check(".htaccess", async () => {
   const ht = await readFile(path.join(root, ".htaccess"), "utf8");
   const source = await readFile(path.resolve(root, "..", "public/.htaccess"), "utf8");
   assert.equal(ht, source);
+  const wwwRule = ht.indexOf("RewriteCond %{HTTP_HOST} ^www\\.spainwitheva\\.com$ [NC]");
+  const cartRule = ht.indexOf("RewriteCond %{QUERY_STRING} (^|&)add-to-cart= [NC]");
   const pass = ht.indexOf("RewriteCond %{REQUEST_FILENAME} -f [OR]");
+  assert.ok(wwwRule !== -1 && cartRule !== -1 && wwwRule < pass && cartRule < pass);
+  assert.ok(ht.includes("RewriteRule ^(.*)$ https://spainwitheva.com/$1 [R=301,L]"));
   const madridRule = ht.indexOf("RewriteRule ^product/dushevnyj-madrid- /ekskursii/madrid/");
   const toledoRule = ht.indexOf("RewriteRule ^product/toledo-pervaya-stolicza-ispanii- /ekskursii/toledo/");
   const generic = ht.indexOf("RewriteRule ^(product|product-category|shop|category)/ / [R=301,L,NC]");
@@ -471,6 +476,33 @@ await check("page sizes", async () => {
     assert.ok(html.length < 180000, `${file} HTML is ${html.length}`);
   }
   console.log(JSON.stringify(report, null, 2));
+});
+
+await check("no unfinished placeholders", async () => {
+  async function walk(dir) {
+    const entries = await readdir(dir, { withFileTypes: true });
+    for (const entry of entries) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        await walk(full);
+        continue;
+      }
+      if (!entry.name.endsWith(".html") && !entry.name.endsWith(".js")) continue;
+      const text = await readFile(full, "utf8");
+      assert.equal(text.includes("[УТОЧНИТЬ"), false, full);
+    }
+  }
+  await walk(root);
+  const home = await readFile(path.join(root, "index.html"), "utf8");
+  for (const html of [home, await readFile(path.join(root, "ekskursii/index.html"), "utf8")]) {
+    assert.ok(html.includes("/images/tours/cards/izyskannyj-madrid.webp"));
+    assert.ok(html.includes("/images/tours/cards/vkusnyj-madrid.webp"));
+    assert.ok(html.includes("/images/tours/cards/madrid-v-bokale.webp"));
+    assert.ok(html.includes("/images/tours/cards/aristokratichnyj-madrid.webp"));
+    assert.ok(html.includes("/images/tours/cards/segovia-aqueduct.webp"));
+    assert.ok(html.includes('class="tour-fallback"'));
+    assert.ok(html.includes('loading="lazy"'));
+  }
 });
 
 if (failures.length > 0) {

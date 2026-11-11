@@ -5,8 +5,7 @@ import { madridPageReviews, toledoReviews } from "./reviews";
 /**
  * Факты каталога владельца, октябрь 2026.
  * Цены ниже за гида команды. Лично с Евой +50 €.
- * Плейсхолдеры [УТОЧНИТЬ: ...] остаются только там, где факта нет:
- * место встречи и свои фото. Отзывы берутся из reviews.ts.
+ * Отзывы берутся из reviews.ts.
  */
 
 export const evaSurcharge = "лично с Евой +50 €";
@@ -17,8 +16,8 @@ export const priceIncludes = "Работа гида и подготовленн�
 export const paidByGuests =
   "Еда, напитки, входные билеты и транспорт. Гости оплачивают это отдельно, за себя и за гида.";
 
-export const meetingGap = "[УТОЧНИТЬ: место встречи]";
-export const meetingAnswer = `Место встречи обсудим в WhatsApp, когда выберем дату. ${meetingGap}`;
+// TODO: replace with the street address once Eva confirms the meeting point.
+export const meetingAnswer = "Место встречи согласуем в WhatsApp";
 
 export const bookingTerms = {
   title: "Условия бронирования",
@@ -47,7 +46,7 @@ export type TourPhoto = {
   height?: number;
   /** CSS object-position, used when a frame crops the photo. */
   position?: string;
-  gap?: string;
+  fallback?: string;
 };
 
 export const evaPortrait: TourPhoto = {
@@ -117,11 +116,6 @@ function formatWa(title: string) {
   return `Привет! Хочу экскурсию «${title}». Дата: , нас будет: `;
 }
 
-const photoGap = (label: string): TourPhoto => ({
-  alt: "",
-  gap: `[УТОЧНИТЬ: фото, ${label}]`,
-});
-
 export const tourPages: TourPageData[] = [
   {
     slug: "madrid",
@@ -129,7 +123,7 @@ export const tourPages: TourPageData[] = [
     crumb: "Душевный Мадрид",
     h1: "Индивидуальная экскурсия по Мадриду с русскоязычным гидом",
     evaLine:
-      "Покажу вам исторический центр так, как хожу по нему сама: Королевский дворец снаружи, Пласа Майор, старые улочки и рынок Сан-Мигель.",
+      "Покажу тебе исторический центр так, как хожу по нему сама: Королевский дворец снаружи, Пласа Майор, старые улочки и рынок Сан-Мигель.",
     cardTitle: "Душевный Мадрид",
     duration: "около 3 часов, пешком",
     group: "только ваша компания",
@@ -201,7 +195,7 @@ export const tourPages: TourPageData[] = [
       "Покажу Королевский дворец снаружи, Пласа Майор, старые улочки и рынок Сан-Мигель. По дороге расскажу истории города и задержимся в атмосферных местах.",
       "Внутрь дворца на этой прогулке не заходим.",
       "Так я показываю не туристическую Испанию: спокойным шагом и своими историями.",
-      `Место встречи обсудим в WhatsApp. ${meetingGap}`,
+      meetingAnswer,
     ],
     faqs: [
       {
@@ -265,7 +259,7 @@ export const tourPages: TourPageData[] = [
     path: "/ekskursii/toledo/",
     crumb: "Толедо",
     h1: "Индивидуальная экскурсия в Толедо из Мадрида на русском",
-    evaLine: "Покажу вам первую столицу Испании. Около 17:00 будем обратно в Мадриде.",
+    evaLine: "Покажу тебе первую столицу Испании. Около 17:00 будем обратно в Мадриде.",
     cardTitle: "Толедо",
     duration: "полный день, обратно около 17:00",
     group: "только ваша компания",
@@ -325,7 +319,7 @@ export const tourPages: TourPageData[] = [
       "Это выезд из Мадрида на целый день. Около 17:00 возвращаемся в Мадрид.",
       "До Толедо около 30 минут на скоростном поезде в одну сторону. Если удобнее с водителем, трансфер посчитаю по запросу. Билеты и трансфер оплачиваются отдельно, за вас и за гида.",
       "Смотрим замок Алькасар, где жили Габсбурги, старые улицы, главный средневековый собор и дом-музей Эль Греко. По пути остановка на самый вкусный кофе в Испании и хороший обед. Еда и напитки оплачиваются отдельно.",
-      `Место встречи обсудим в WhatsApp. ${meetingGap}`,
+      meetingAnswer,
     ],
     separateNote:
       "Билеты на скоростной поезд или трансфер с водителем тоже оплачивают гости. Цену трансфера называю по запросу.",
@@ -389,7 +383,13 @@ export const cardGroups: Array<{ title: string; cards: TourCardData[] }> = [
         title: "Изысканный Мадрид",
         why: "Саламанка и район «старых денег».",
         meta: "3 часа · от 200 €",
-        photo: photoGap("Изысканный Мадрид"),
+        photo: {
+          src: "/images/tours/cards/izyskannyj-madrid.webp",
+          alt: "Прогулка по району Саламанка в Мадриде",
+          width: 800,
+          height: 1067,
+          position: "center 22%",
+        },
         waText: formatWa("Изысканный Мадрид"),
       },
       {
@@ -397,7 +397,13 @@ export const cardGroups: Array<{ title: string; cards: TourCardData[] }> = [
         title: "Вкусный Мадрид",
         why: "Вина, сыры, коктейли и тапас, лучше вечером.",
         meta: "4 часа · от 250 €",
-        photo: photoGap("Вкусный Мадрид"),
+        photo: {
+          src: "/images/tours/cards/vkusnyj-madrid.webp",
+          alt: "Гости экскурсии у витрины с хамоном",
+          width: 800,
+          height: 1422,
+          position: "center 42%",
+        },
         waText: formatWa("Вкусный Мадрид"),
       },
       {
@@ -405,7 +411,13 @@ export const cardGroups: Array<{ title: string; cards: TourCardData[] }> = [
         title: "Мадрид в бокале",
         why: "Вермут, бар 1920-х, Хемингуэй, Синатра, финал на крыше.",
         meta: "4 часа · от 250 €",
-        photo: photoGap("Мадрид в бокале"),
+        photo: {
+          src: "/images/tours/cards/madrid-v-bokale.webp",
+          alt: "Гости экскурсии с бокалами в кафе Lhardy",
+          width: 800,
+          height: 1067,
+          position: "center 35%",
+        },
         waText: formatWa("Мадрид в бокале"),
       },
       {
@@ -413,7 +425,13 @@ export const cardGroups: Array<{ title: string; cards: TourCardData[] }> = [
         title: "Аристократичный Мадрид",
         why: "Душевный и Изысканный за один день, с обедом.",
         meta: "полный день · от 450 €",
-        photo: photoGap("Аристократичный Мадрид"),
+        photo: {
+          src: "/images/tours/cards/aristokratichnyj-madrid.webp",
+          alt: "Собор Альмудена и Королевский дворец снаружи",
+          width: 800,
+          height: 402,
+          position: "center center",
+        },
         waText: formatWa("Аристократичный Мадрид"),
       },
     ],
@@ -435,7 +453,13 @@ export const cardGroups: Array<{ title: string; cards: TourCardData[] }> = [
         title: "Сеговия",
         why: "Акведук, королевский Алькасар и старый город.",
         meta: "полный день · от 450 € + билеты на поезд",
-        photo: photoGap("Сеговия"),
+        photo: {
+          src: "/images/tours/cards/segovia-aqueduct.webp",
+          alt: "Гости экскурсии у римского акведука в Сеговии",
+          width: 800,
+          height: 1422,
+          position: "center 46%",
+        },
         waText: formatWa("Сеговия"),
       },
       {
@@ -443,7 +467,7 @@ export const cardGroups: Array<{ title: string; cards: TourCardData[] }> = [
         title: "Аранхуэс",
         why: "Летняя королевская резиденция.",
         meta: "полный день · от 450 € + билеты на поезд",
-        photo: photoGap("Аранхуэс"),
+        photo: { alt: "", fallback: "Аранхуэс" },
         waText: formatWa("Аранхуэс"),
       },
       {
@@ -451,7 +475,7 @@ export const cardGroups: Array<{ title: string; cards: TourCardData[] }> = [
         title: "Эскориал и Долина Павших",
         why: "Выезд из Мадрида на целый день.",
         meta: "полный день · от 450 € + билеты на поезд",
-        photo: photoGap("Эскориал и Долина Павших"),
+        photo: { alt: "", fallback: "Эскориал и Долина Павших" },
         waText: formatWa("Эскориал и Долина Павших"),
       },
     ],
@@ -460,21 +484,6 @@ export const cardGroups: Array<{ title: string; cards: TourCardData[] }> = [
 
 function wordCount(parts: string[]) {
   return parts.join(" ").trim().split(/\s+/).filter(Boolean).length;
-}
-
-export function collectGaps(value: unknown, found = new Set<string>()): string[] {
-  if (typeof value === "string") {
-    for (const match of value.matchAll(/\[УТОЧНИТЬ:[^\]]+\]/g)) found.add(match[0]);
-    return [...found];
-  }
-  if (Array.isArray(value)) {
-    for (const item of value) collectGaps(item, found);
-    return [...found];
-  }
-  if (value && typeof value === "object") {
-    for (const item of Object.values(value)) collectGaps(item, found);
-  }
-  return [...found];
 }
 
 for (const tour of tourPages) {
