@@ -1,4 +1,4 @@
-import { GoogleReviewsBlock } from "./review-strip";
+import { TourQuoteBlock } from "./review-strip";
 import { TourFooter, TourHeader } from "./tour-chrome";
 import { tourJsonLd } from "./tour-seo";
 import {
@@ -170,7 +170,7 @@ export function TourPageView({ tour }: { tour: TourPageData }) {
           </section>
         ) : null}
 
-        <GoogleReviewsBlock reviews={tour.reviews} className="tp-block tp-reviews" />
+        <TourQuoteBlock quote={tour.quote} />
 
         <section className="tp-cta">
           <h2>Написать Еве</h2>

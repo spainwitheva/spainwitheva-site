@@ -358,12 +358,14 @@ await check("tour pages", async () => {
     assert.ok(html.includes("за 7–13 дней: возврат 50% предоплаты;"));
     assert.ok(html.includes("менее чем за 7 дней: предоплата не возвращается."));
     assert.ok(html.includes("Можно ли отменить или перенести?"));
-    assert.ok(html.includes("Отзывы в Google"));
-    assert.ok(html.includes("5,0 · 40 отзывов в Google Картах"));
-    assert.ok(html.includes("читать целиком"));
-    assert.ok(html.includes("Оценка 5 из 5"));
+    assert.equal(html.includes("Отзывы в Google"), false);
+    assert.equal(html.includes("5,0 · 40 отзывов в Google Картах"), false);
+    assert.equal(html.includes("читать целиком"), false);
+    assert.equal(html.includes("Оценка 5 из 5"), false);
+    assert.equal(html.includes("review-card"), false);
+    assert.ok(html.includes("★ 5,0 · 40 отзывов в Google"));
     const reviewsLink = html.match(
-      /<a\b[^>]*href="https:\/\/maps\.app\.goo\.gl\/YqFXduUcaWz6ovzn9"[^>]*>/,
+      /<a\b[^>]*class="google-badge"[^>]*href="https:\/\/maps\.app\.goo\.gl\/YqFXduUcaWz6ovzn9"[^>]*>/,
     );
     assert.ok(reviewsLink, "missing Google reviews link");
     assert.match(reviewsLink[0], /target="_blank"/);
@@ -374,7 +376,10 @@ await check("tour pages", async () => {
     assert.equal(html.includes("PayPal"), false);
     assert.equal(html.includes("грузинский"), false);
     assert.equal(html.includes("если речь идёт именно о нём"), false);
-    assert.equal(html.includes("—"), false);
+    const withoutQuoteMark = html
+      .replaceAll("— Elena Shi, Google", "")
+      .replaceAll("— Jeyla Huseynova, Google", "");
+    assert.equal(withoutQuoteMark.includes("—"), false);
     const blocks = jsonLdBlocks(html);
     assert.ok(blocks.length >= 2);
     for (const block of blocks) assertNoReviewMarkup(block, "tour");
@@ -396,23 +401,26 @@ await check("tour pages", async () => {
   assert.equal(madridLd["@graph"].find((node) => node["@type"] === "Product").offers.price, "200");
   assert.equal(toledoLd["@graph"].find((node) => node["@type"] === "Product").offers.price, "450");
 
-  assert.ok(madrid.includes('что придет особый шарм прогулке'));
-  assert.ok(madrid.includes("обязательно обратимся снова."));
-  assert.ok(madrid.includes("Elena Shi"));
-  assert.ok(madrid.includes("«Душевный Мадрид»"));
-  assert.ok(madrid.includes("Dariya Vlasova"));
-  assert.ok(madrid.includes("«Мадрид»</span>"));
-  assert.ok(madrid.includes("Обязательно с Евой :)"));
+  assert.equal(madrid.includes("что придет особый шарм прогулке"), false);
+  assert.equal(madrid.includes("обязательно обратимся снова."), false);
+  assert.ok(madrid.includes("Прекрасно провели время, узнали много интересных фактов о Мадриде, которые не прочтёшь нигде."));
+  assert.ok(madrid.includes("— Elena Shi, Google"));
+  assert.ok(madrid.includes("Душевный Мадрид"));
+  assert.equal(madrid.includes("«Душевный Мадрид»"), false);
+  assert.equal(madrid.includes("Dariya Vlasova"), false);
+  assert.equal(madrid.includes("«Мадрид»</span>"), false);
+  assert.equal(madrid.includes("Обязательно с Евой :)"), false);
   assert.equal(madrid.includes("Jeyla Huseynova"), false);
   assert.equal(madrid.includes("Roman Pyshkin"), false);
   assert.equal(madrid.includes("Мы выбрали маршрут"), false);
   assert.equal(madrid.includes("Мадрид,Толедо с Евой!!!"), false);
-  assert.ok(toledo.includes("Jeyla Huseynova"));
-  assert.ok(toledo.includes("«Мадрид и Толедо»"));
+  assert.ok(toledo.includes("— Jeyla Huseynova, Google"));
+  assert.equal(toledo.includes("«Мадрид и Толедо»"), false);
   assert.equal(toledo.includes("Madrid + Toledo"), false);
-  assert.ok(toledo.includes("фактов,историй"));
-  assert.ok(toledo.includes("Интересно,  душевно"));
-  assert.ok(toledo.includes("Теперь Испания только с Евой 👌👌"));
+  assert.equal(toledo.includes("фактов,историй"), false);
+  assert.equal(toledo.includes("Интересно,  душевно"), false);
+  assert.ok(toledo.includes("Интересно, душевно, множество интересных фактов, историй, о которых мало кто расскажет"));
+  assert.equal(toledo.includes("Теперь Испания только с Евой 👌👌"), false);
   assert.equal(toledo.includes("Elena Shi"), false);
   assert.equal(toledo.includes("Александр Барабан"), false);
   assert.equal(toledo.includes("Мадрид,Толедо с Евой!!!"), false);
@@ -425,21 +433,30 @@ await check("tour pages", async () => {
   assert.ok(home.includes("Аранхуэс"));
   assert.ok(home.includes("Эскориал и Долина Павших"));
   assert.ok(home.includes("Работаем и в других городах Испании."));
-  assert.ok(home.includes("Отзывы в Google"));
-  assert.ok(home.includes("5,0 · 40 отзывов в Google Картах"));
+  assert.equal(home.includes("Отзывы в Google"), false);
+  assert.equal(home.includes("5,0 · 40 отзывов в Google Картах"), false);
   assert.equal(home.includes("5,0 ★ · 40 отзывов в Google"), false);
-  assert.ok(home.includes("Elena Shi"));
-  assert.ok(home.includes("Jeyla Huseynova"));
-  assert.ok(home.includes("Dariya Vlasova"));
-  assert.ok(home.includes("Svetlana Patseva"));
-  assert.ok(home.includes("Inna Dorn"));
-  assert.ok(home.includes("Александр Барабан"));
-  assert.ok(home.includes("Отличный гид!  Очень живописные места"));
-  assert.ok(home.includes("Ева ты лучшая !!!!"));
-  assert.ok(home.includes("настолько познавательной! …"));
-  assert.ok(home.includes("«Гастротур по Мадриду и Валенсия»"));
-  assert.ok(home.includes("«Мадрид и Толедо»"));
-  assert.ok(home.includes("«Мадрид»"));
+  assert.equal(home.includes("review-card"), false);
+  assert.equal(home.includes("читать целиком"), false);
+  assert.ok(home.includes("★ 5,0 · 40 отзывов в Google"));
+  const homeBadge = home.match(
+    /<a\b[^>]*class="google-badge"[^>]*href="https:\/\/maps\.app\.goo\.gl\/YqFXduUcaWz6ovzn9"[^>]*>★ 5,0 · 40 отзывов в Google<\/a>/,
+  );
+  assert.ok(homeBadge, "missing home Google rating pill");
+  assert.match(homeBadge[0], /target="_blank"/);
+  assert.match(homeBadge[0], /rel="noopener"/);
+  assert.equal(home.includes("Elena Shi"), false);
+  assert.equal(home.includes("Jeyla Huseynova"), false);
+  assert.equal(home.includes("Dariya Vlasova"), false);
+  assert.equal(home.includes("Svetlana Patseva"), false);
+  assert.equal(home.includes("Inna Dorn"), false);
+  assert.equal(home.includes("Александр Барабан"), false);
+  assert.equal(home.includes("Отличный гид!  Очень живописные места"), false);
+  assert.equal(home.includes("Ева ты лучшая !!!!"), false);
+  assert.equal(home.includes("настолько познавательной! …"), false);
+  assert.equal(home.includes("«Гастротур по Мадриду и Валенсия»"), false);
+  assert.equal(home.includes("«Мадрид и Толедо»"), false);
+  assert.equal(home.includes("«Мадрид»"), false);
   assert.equal(home.includes("gastro Madrid + Valencia"), false);
   assert.equal(home.includes("Madrid + Toledo"), false);
   assert.equal(home.includes("Roman Pyshkin"), false);

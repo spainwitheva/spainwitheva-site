@@ -1,5 +1,4 @@
-import { GoogleReviewsBlock } from "./review-strip";
-import { homeReviews } from "./reviews";
+import { GoogleRatingBadge } from "./review-strip";
 import {
   cardGroups,
   evaSurcharge,
@@ -104,11 +103,11 @@ export function HomeTourStrip() {
     <section className="home-tours" aria-labelledby="home-tours-title">
       <div className="home-tours-head">
         <h2 id="home-tours-title">Экскурсии</h2>
+        <GoogleRatingBadge />
         <a href="/ekskursii/">Все экскурсии</a>
       </div>
       <TourCardGrid groupHeading="p" accordion />
       <p className="home-tours-note">{otherCitiesNote}</p>
-      <GoogleReviewsBlock reviews={homeReviews} headingId="home-reviews-title" className="home-reviews" />
     </section>
   );
 }
