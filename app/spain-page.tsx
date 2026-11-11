@@ -71,6 +71,7 @@ export function SpainWithEvaPage({
         </a>
         <nav className="desktop-nav" aria-label={t("Основная навигация")}>
           <a href="#excursions">{t("Экскурсии")}</a>
+          {locale === "ru" ? <a href="/stati/">Статьи</a> : null}
           <a href="#spain">{t("Туры по Испании")}</a>
           <a href="#camino">{t("Путь Сантьяго")}</a>
           <a href="#services">{t("Отдых под ключ")}</a>
@@ -96,6 +97,7 @@ export function SpainWithEvaPage({
           <summary aria-label={t("Открыть меню")}><span></span><span></span></summary>
           <nav aria-label={t("Мобильная навигация")}>
             <a href="#excursions">{t("Экскурсии")}</a>
+            {locale === "ru" ? <a href="/stati/">Статьи</a> : null}
             <a href="#spain">{t("Туры по Испании")}</a>
             <a href="#camino">{t("Путь Сантьяго")}</a>
             <a href="#services">{t("Отдых под ключ")}</a>
@@ -416,6 +418,7 @@ export function SpainWithEvaPage({
         <p>{t("Нескучные экскурсии и путешествия по Испании.")}</p>
         <div className="footer-links">
           <a href="#excursions">{t("Экскурсии")}</a>
+          {locale === "ru" ? <a href="/stati/">Статьи</a> : null}
           <a href="#spain">{t("Туры")}</a>
           <a href="#camino">{t("Путь Сантьяго")}</a>
           <a href="#about">{t("О нас")}</a>

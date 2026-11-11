@@ -240,19 +240,21 @@ await check("sitemap.xml", async () => {
     assert.ok(sitemap.includes(`href="${href}"`), `missing href ${href}`);
   }
   const blocks = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/g)].map((match) => match[1]);
-  assert.equal(blocks.length, 7);
-  const tourLocs = [
+  assert.equal(blocks.length, 9);
+  const singleLanguageLocs = [
     "https://spainwitheva.com/ekskursii/",
     "https://spainwitheva.com/ekskursii/madrid/",
     "https://spainwitheva.com/ekskursii/toledo/",
+    "https://spainwitheva.com/stati/",
+    "https://spainwitheva.com/stati/chto-posmotret-v-madride-za-1-2-dnya/",
   ];
   for (const block of blocks) {
     const loc = block.match(/<loc>([^<]+)<\/loc>/)?.[1];
-    if (tourLocs.includes(loc)) {
+    if (singleLanguageLocs.includes(loc)) {
       assert.equal(block.includes("hreflang"), false, `${loc} must not have hreflang`);
     }
   }
-  for (const url of tourLocs) {
+  for (const url of singleLanguageLocs) {
     assert.ok(sitemap.includes(`<loc>${url}</loc>`), `missing loc ${url}`);
   }
 });
@@ -398,6 +400,8 @@ await check("tour pages", async () => {
 
   assert.ok(home.includes('href="/ekskursii/madrid/"'));
   assert.ok(home.includes('href="/ekskursii/toledo/"'));
+  assert.ok(home.includes('href="/stati/"'));
+  assert.ok(madrid.includes('href="/stati/"'));
   assert.ok(home.includes("Сеговия"));
   assert.ok(home.includes("Аранхуэс"));
   assert.ok(home.includes("Эскориал и Долина Павших"));
@@ -406,10 +410,80 @@ await check("tour pages", async () => {
   assert.ok(home.includes(mapsUrl));
   assert.equal(english.includes("/ekskursii/madrid/"), false);
   assert.equal(english.includes("/ekskursii/toledo/"), false);
+  for (const file of ["en/index.html", "uk/index.html", "es/index.html"]) {
+    const html = file === "en/index.html" ? english : await readFile(path.join(root, file), "utf8");
+    assert.equal(html.includes('href="/stati/"'), false, file);
+  }
 
   assert.ok(index.includes('href="/ekskursii/madrid/"'));
   assert.ok(index.includes('href="/ekskursii/toledo/"'));
   assert.equal(index.includes("hreflang="), false);
+});
+
+await check("article pages", async () => {
+  const index = await readFile(path.join(root, "stati/index.html"), "utf8");
+  const article = await readFile(
+    path.join(root, "stati/chto-posmotret-v-madride-za-1-2-dnya/index.html"),
+    "utf8",
+  );
+  const title = "Что посмотреть в Мадриде за 1–2 дня: маршрут Евы";
+  const description =
+    "Пеший маршрут по Мадриду на 1–2 дня от гида Евы: куда идти по центру, где поесть без туристических ловушек и что оставить на второй день.";
+  const canonical = "https://spainwitheva.com/stati/chto-posmotret-v-madride-za-1-2-dnya/";
+
+  assert.equal(decode(article.match(/<title>([^<]*)<\/title>/)[1]), title);
+  assert.equal(metaContent(article, "description", "name"), description);
+  const canonicalLink = tags(article, "link").filter((item) => item.rel === "canonical");
+  assert.equal(canonicalLink.length, 1);
+  assert.equal(canonicalLink[0].href, canonical);
+  assert.equal(metaContent(article, "og:title", "property"), title);
+  assert.equal(metaContent(article, "og:description", "property"), description);
+  assert.equal(metaContent(article, "og:url", "property"), canonical);
+  assert.equal(metaContent(article, "og:type", "property"), "article");
+  assert.match(article, /<html[^>]*\slang=["']ru["']/i);
+  assert.ok(article.includes("<h1>Что посмотреть в Мадриде за 1–2 дня</h1>"));
+  assert.ok(article.includes('href="/ekskursii/madrid/"'));
+  assert.equal(article.includes('href="/ekskursii/madrid/" target='), false);
+  assert.ok(article.includes('href="https://www.parroquiadesantacruz.com/" target="_blank" rel="noopener noreferrer"'));
+  assert.ok(article.includes('href="https://www.casaalberto.es/" target="_blank" rel="noopener noreferrer"'));
+  assert.ok(article.includes('href="/stati/"'));
+  assert.ok(article.includes("Написать в WhatsApp"));
+  assert.ok(article.includes('class="tp-cta"'));
+  const hero = "https://spainwitheva.com/images/articles/madrid-balcony-plaza-mayor.webp";
+  const heroAlt = "Гости с Евой на балконе над Пласа Майор в Мадриде";
+  assert.equal(metaContent(article, "og:image", "property"), hero);
+  assert.equal(metaContent(article, "og:image:alt", "property"), heroAlt);
+  assert.ok(article.includes('loading="eager"'));
+  assert.ok(/fetchpriority="high"/i.test(article));
+  assert.equal(/<img\b[^>]*loading="lazy"/i.test(article), false);
+  assert.ok(article.includes("/images/articles/madrid-balcony-plaza-mayor.webp"));
+  assert.ok(article.includes(`alt="${heroAlt}"`));
+  assert.ok(article.includes("Их сделала семья Руис де Луна"));
+  assert.equal(article.includes("не для публикации"), false);
+  assert.equal(article.includes("SEO-заголовок"), false);
+
+  const graph = jsonLdBlocks(article).find((block) => Array.isArray(block["@graph"]))["@graph"];
+  const articleLd = graph.find((node) => node["@type"] === "Article");
+  const crumbs = graph.find((node) => node["@type"] === "BreadcrumbList");
+  assert.equal(articleLd.headline, title);
+  assert.equal(articleLd.description, description);
+  assert.equal(articleLd.inLanguage, "ru");
+  assert.equal(articleLd.author.name, "Eva Sytina");
+  assert.equal(articleLd.publisher.name, "SpainWithEva");
+  assert.equal(articleLd.image, hero);
+  assert.equal(crumbs["@type"], "BreadcrumbList");
+  assert.equal(crumbs.itemListElement.length, 3);
+  assert.equal(crumbs.itemListElement[1].name, "Статьи");
+
+  assert.ok(index.includes("<h1>Статьи</h1>"));
+  assert.ok(index.includes("Что посмотреть в Мадриде за 1–2 дня"));
+  assert.ok(index.includes(description));
+  assert.ok(index.includes('href="/stati/chto-posmotret-v-madride-za-1-2-dnya/"'));
+  assert.ok(index.includes("/images/articles/madrid-balcony-plaza-mayor.webp"));
+  assert.ok(index.includes(heroAlt));
+  assert.ok(index.includes('loading="lazy"'));
+  assert.ok(index.includes("11 ноября 2026"));
+  assert.match(index, /<html[^>]*\slang=["']ru["']/i);
 });
 
 await check(".htaccess", async () => {
@@ -461,6 +535,8 @@ await check("page sizes", async () => {
     "ekskursii/index.html",
     "ekskursii/madrid/index.html",
     "ekskursii/toledo/index.html",
+    "stati/index.html",
+    "stati/chto-posmotret-v-madride-za-1-2-dnya/index.html",
   ];
   const report = {};
   for (const file of files) {

@@ -4,7 +4,7 @@ import { waLink } from "./tours-data";
 
 const headerWa = waLink(whatsappMessages.ru);
 
-export function TourHeader({ index }: { index?: boolean }) {
+export function TourHeader({ index, articles }: { index?: boolean; articles?: boolean }) {
   return (
     <header className="site-header">
       <a className="logo" href="/" aria-label="SpainWithEva">
@@ -12,6 +12,7 @@ export function TourHeader({ index }: { index?: boolean }) {
       </a>
       <nav className="desktop-nav" aria-label="Основная навигация">
         <a href="/ekskursii/" aria-current={index ? "page" : undefined}>Экскурсии</a>
+        <a href="/stati/" aria-current={articles ? "page" : undefined}>Статьи</a>
         <a href="/#spain">Туры по Испании</a>
         <a href="/#camino">Путь Сантьяго</a>
         <a href="/#services">Отдых под ключ</a>
@@ -37,6 +38,7 @@ export function TourHeader({ index }: { index?: boolean }) {
         <summary aria-label="Открыть меню"><span></span><span></span></summary>
         <nav aria-label="Мобильная навигация">
           <a href="/ekskursii/">Экскурсии</a>
+          <a href="/stati/">Статьи</a>
           <a href="/#spain">Туры по Испании</a>
           <a href="/#camino">Путь Сантьяго</a>
           <a href="/#services">Отдых под ключ</a>
@@ -55,6 +57,7 @@ export function TourFooter() {
       <p>Нескучные экскурсии и путешествия по Испании.</p>
       <div className="footer-links">
         <a href="/ekskursii/">Экскурсии</a>
+        <a href="/stati/">Статьи</a>
         <a href="/#spain">Туры</a>
         <a href="/#camino">Путь Сантьяго</a>
         <a href="/#about">О нас</a>
