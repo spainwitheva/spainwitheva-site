@@ -33,4 +33,13 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://spainwitheva.com/es/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://spainwitheva.com/"/>
   </url>
+  <url>
+    <loc>https://spainwitheva.com/ekskursii/</loc>
+  </url>
+  <url>
+    <loc>https://spainwitheva.com/ekskursii/madrid/</loc>
+  </url>
+  <url>
+    <loc>https://spainwitheva.com/ekskursii/toledo/</loc>
+  </url>
 </urlset>

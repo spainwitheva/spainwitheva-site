@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { GOOGLE_MAPS_URL } from "./reviews";
 import { sitePrices } from "./site-content";
 import { translate, type Locale } from "./translations";
 
@@ -132,6 +133,7 @@ export function businessJsonLd() {
       "https://www.facebook.com/spainwithevaa",
       "https://tiktok.com/@spain.with.eva",
       "https://t.me/spainwitheva",
+      GOOGLE_MAPS_URL,
     ],
   };
 }

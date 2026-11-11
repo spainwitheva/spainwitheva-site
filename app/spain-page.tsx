@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { AnalyticsAndConsent } from "./analytics-consent";
 import { Locale, translate } from "./translations";
@@ -10,7 +10,13 @@ function Arrow() {
   return <span aria-hidden="true">↗</span>;
 }
 
-export function SpainWithEvaPage({ locale }: { locale: Locale }) {
+export function SpainWithEvaPage({
+  locale,
+  afterHero,
+}: {
+  locale: Locale;
+  afterHero?: ReactNode;
+}) {
   const t = (value: string) => translate(locale, value);
   const whatsappUrl = `https://wa.me/${siteContacts.whatsappNumber}?text=${encodeURIComponent(whatsappMessages[locale])}`;
   const [activeRegion, setActiveRegion] = useState("Все регионы");
@@ -129,6 +135,8 @@ export function SpainWithEvaPage({ locale }: { locale: Locale }) {
           </div>
         </div>
       </section>
+
+      {afterHero}
 
       <section className="section journeys" id="journeys">
         <div className="section-heading split-heading">
