@@ -358,8 +358,16 @@ await check("tour pages", async () => {
     assert.ok(html.includes("за 7–13 дней: возврат 50% предоплаты;"));
     assert.ok(html.includes("менее чем за 7 дней: предоплата не возвращается."));
     assert.ok(html.includes("Можно ли отменить или перенести?"));
-    assert.ok(html.includes("5,0 ★ · 40 отзывов в Google"));
-    assert.ok(html.includes("Гугл Карты"));
+    assert.ok(html.includes("Отзывы в Google"));
+    assert.ok(html.includes("5,0 · 40 отзывов в Google Картах"));
+    assert.ok(html.includes("читать целиком"));
+    assert.ok(html.includes("Оценка 5 из 5"));
+    const reviewsLink = html.match(
+      /<a\b[^>]*href="https:\/\/maps\.app\.goo\.gl\/YqFXduUcaWz6ovzn9"[^>]*>/,
+    );
+    assert.ok(reviewsLink, "missing Google reviews link");
+    assert.match(reviewsLink[0], /target="_blank"/);
+    assert.match(reviewsLink[0], /rel="noopener"/);
     assert.ok(html.includes(mapsUrl));
     assert.equal(html.includes("Tripster"), false);
     assert.equal(html.includes("Трипстер"), false);
@@ -389,14 +397,23 @@ await check("tour pages", async () => {
   assert.equal(toledoLd["@graph"].find((node) => node["@type"] === "Product").offers.price, "450");
 
   assert.ok(madrid.includes('что придет особый шарм прогулке'));
-  assert.ok(madrid.includes("Мы выбрали маршрут « Душевный Мадрид» и нисколько не пожалели , наоборот - даже дети были в восторге"));
+  assert.ok(madrid.includes("обязательно обратимся снова."));
   assert.ok(madrid.includes("Elena Shi"));
-  assert.ok(toledo.includes("Мадрид,Толедо с Евой!!!"));
-  assert.ok(toledo.includes("фактов,историй"));
-  assert.ok(toledo.includes("это не просто экскурсия , это душевная прогулка"));
-  assert.ok(toledo.includes("Jeyla Huseynova"));
-  assert.ok(toledo.includes("Александр Барабан"));
+  assert.ok(madrid.includes("«Душевный Мадрид»"));
+  assert.ok(madrid.includes("Dariya Vlasova"));
+  assert.ok(madrid.includes("Обязательно с Евой :)"));
+  assert.equal(madrid.includes("Jeyla Huseynova"), false);
+  assert.equal(madrid.includes("Roman Pyshkin"), false);
+  assert.equal(madrid.includes("Мы выбрали маршрут"), false);
   assert.equal(madrid.includes("Мадрид,Толедо с Евой!!!"), false);
+  assert.ok(toledo.includes("Jeyla Huseynova"));
+  assert.ok(toledo.includes("Madrid + Toledo"));
+  assert.ok(toledo.includes("фактов,историй"));
+  assert.ok(toledo.includes("Интересно,  душевно"));
+  assert.ok(toledo.includes("Теперь Испания только с Евой 👌👌"));
+  assert.equal(toledo.includes("Elena Shi"), false);
+  assert.equal(toledo.includes("Александр Барабан"), false);
+  assert.equal(toledo.includes("Мадрид,Толедо с Евой!!!"), false);
 
   assert.ok(home.includes('href="/ekskursii/madrid/"'));
   assert.ok(home.includes('href="/ekskursii/toledo/"'));
@@ -406,13 +423,32 @@ await check("tour pages", async () => {
   assert.ok(home.includes("Аранхуэс"));
   assert.ok(home.includes("Эскориал и Долина Павших"));
   assert.ok(home.includes("Работаем и в других городах Испании."));
-  assert.ok(home.includes("5,0 ★ · 40 отзывов в Google"));
+  assert.ok(home.includes("Отзывы в Google"));
+  assert.ok(home.includes("5,0 · 40 отзывов в Google Картах"));
+  assert.equal(home.includes("5,0 ★ · 40 отзывов в Google"), false);
+  assert.ok(home.includes("Elena Shi"));
+  assert.ok(home.includes("Jeyla Huseynova"));
+  assert.ok(home.includes("Dariya Vlasova"));
+  assert.ok(home.includes("Svetlana Patseva"));
+  assert.ok(home.includes("Inna Dorn"));
+  assert.ok(home.includes("Александр Барабан"));
+  assert.ok(home.includes("Отличный гид!  Очень живописные места"));
+  assert.ok(home.includes("Ева ты лучшая !!!!"));
+  assert.ok(home.includes("настолько познавательной! …"));
+  assert.ok(home.includes("gastro Madrid + Valencia"));
+  assert.equal(home.includes("Roman Pyshkin"), false);
+  assert.equal(home.includes("Ekaterina Ivashchenko"), false);
+  assert.equal(home.includes("Anastasija Morozova"), false);
   assert.ok(home.includes(mapsUrl));
+  assert.equal(home.includes('"aggregateRating"'), false);
+  assert.equal(home.includes('"reviewRating"'), false);
   assert.equal(english.includes("/ekskursii/madrid/"), false);
   assert.equal(english.includes("/ekskursii/toledo/"), false);
   for (const file of ["en/index.html", "uk/index.html", "es/index.html"]) {
     const html = file === "en/index.html" ? english : await readFile(path.join(root, file), "utf8");
     assert.equal(html.includes('href="/stati/"'), false, file);
+    assert.equal(html.includes("Отзывы в Google"), false, file);
+    assert.equal(html.includes("Elena Shi"), false, file);
   }
 
   assert.ok(index.includes('href="/ekskursii/madrid/"'));
