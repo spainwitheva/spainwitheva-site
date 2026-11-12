@@ -23,7 +23,6 @@ export default function ExcursionsIndex() {
           </ol>
         </nav>
         <h1>Экскурсии по Мадриду, поездки из Мадрида и по всей Испании с русскоязычным гидом</h1>
-        <p className="tp-price-note">Цены указаны за гида команды, с Евой лично +50 €.</p>
         <GoogleRatingBadge />
         <ExcursionCatalog />
       </article>
