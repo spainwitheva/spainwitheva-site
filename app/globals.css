@@ -458,6 +458,7 @@ footer > p { justify-self: end; margin: 8px 0; }
 .tp-crumbs a { text-decoration: underline; text-underline-offset: 3px; }
 .tp h1 { margin: 0; font-family: var(--font-serif), Georgia, serif; font-weight: 400; font-size: clamp(1.85rem, 7.4vw, 3.15rem); line-height: 1.12; letter-spacing: -.03em; color: var(--wine); }
 .tp-eva-line { margin: 14px 0 0; color: #5a4640; font-size: 1.05rem; line-height: 1.5; }
+.tp-price-note { margin: 12px 0 0; color: #8a766c; font-size: .84rem; line-height: 1.45; }
 .tp-bar { margin-top: 20px; display: grid; gap: 14px; }
 .tp-facts { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
 .tp-facts li { display: grid; gap: 2px; }

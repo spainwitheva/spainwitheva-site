@@ -2,7 +2,6 @@ import { ExcursionCatalog } from "../../catalog-list";
 import { GoogleRatingBadge } from "../../review-strip";
 import { TourFooter, TourHeader } from "../../tour-chrome";
 import { indexJsonLd, indexMetadata } from "../../tour-seo";
-import { evaSurcharge } from "../../tours-data";
 
 export const metadata = indexMetadata();
 
@@ -24,9 +23,7 @@ export default function ExcursionsIndex() {
           </ol>
         </nav>
         <h1>Экскурсии по Мадриду, поездки из Мадрида и по всей Испании с русскоязычным гидом</h1>
-        <p className="tp-eva-line">
-          Цены за гида команды. {evaSurcharge}. У «Душевного Мадрида» и Толедо есть свои страницы, остальные форматы собираем в переписке.
-        </p>
+        <p className="tp-price-note">Цены указаны за гида команды, с Евой лично +50 €.</p>
         <GoogleRatingBadge />
         <ExcursionCatalog />
       </article>
