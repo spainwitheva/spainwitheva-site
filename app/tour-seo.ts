@@ -86,6 +86,7 @@ export function tourJsonLd(tour: TourPageData) {
       "@type": "Offer",
       price: tour.priceAmount,
       priceCurrency: "EUR",
+      availability: "https://schema.org/InStock",
       url,
       description: tour.offerDescription,
       priceSpecification: {
