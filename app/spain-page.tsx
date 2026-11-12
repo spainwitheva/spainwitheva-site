@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { AnalyticsAndConsent } from "./analytics-consent";
 import { Locale, translate } from "./translations";
+import { alreadyOnExcursionCards, catalogHrefForHome } from "./catalog-index";
 import { faq, formatPrice, journeyTypes, madridCatalogTours, madridTours, siteContacts, siteMedia, spainRegions, spainTours, whatsappMessages } from "./site-content";
 
 function Arrow() {
@@ -23,21 +24,13 @@ export function SpainWithEvaPage({
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [showCompanyVideo, setShowCompanyVideo] = useState(false);
   const spainCarouselRef = useRef<HTMLDivElement>(null);
-  const repeatedOnRussianCatalog = new Set([
-    "Душевный Мадрид",
-    "Изысканный Мадрид",
-    "Аристократичный Мадрид",
-    "Вкусный Мадрид",
-    "Толедо: первая столица Испании",
-    "Сеговия: акведук и королевский Алькасар",
-  ]);
   const catalogTours = [
     ...madridTours.map(({ title, duration, text }) => ({ city: "Мадрид", title, duration, text })),
     ...madridCatalogTours,
     ...spainTours,
   ];
   const allSpainTours = locale === "ru"
-    ? catalogTours.filter((tour) => !repeatedOnRussianCatalog.has(tour.title))
+    ? catalogTours.filter((tour) => !alreadyOnExcursionCards.has(tour.title))
     : catalogTours;
   const matchingSpainTours = activeRegion === "Все регионы"
     ? allSpainTours
@@ -277,9 +270,8 @@ export function SpainWithEvaPage({
                 <div className="spain-tour-footer">
                   <span>{t(tour.duration)}</span>
                   <a
-                    href={whatsappUrl}
-                    target="_blank"
-                    rel="noreferrer"
+                    href={locale === "ru" ? catalogHrefForHome(tour.title) : whatsappUrl}
+                    {...(locale === "ru" ? {} : { target: "_blank", rel: "noreferrer" })}
                     aria-label={`Узнать подробнее об экскурсии «${tour.title}»`}
                   >
                     {t("Узнать подробнее")} <Arrow />
