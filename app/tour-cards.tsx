@@ -1,4 +1,3 @@
-import type { ReactNode } from "react";
 import { GoogleRatingBadge } from "./review-strip";
 import {
   cardGroups,
@@ -69,43 +68,32 @@ function GroupBody({ cards }: { cards: TourCardData[] }) {
 export function TourCardGrid({
   groupHeading,
   accordion = false,
-  firstGroupExtra = null,
-  after = null,
 }: {
   groupHeading: "h2" | "p";
   accordion?: boolean;
-  firstGroupExtra?: ReactNode;
-  after?: ReactNode;
 }) {
   const Heading = groupHeading;
   return (
     <div className="tour-groups">
       {cardGroups.map((group, index) => {
         const title = <Heading className="tour-group-title">{group.title}</Heading>;
-        const extra = index === 0 ? firstGroupExtra : null;
         if (!accordion) {
           return (
             <div className="tour-group" key={group.title}>
               {title}
               <GroupBody cards={group.cards} />
-              {extra}
             </div>
           );
         }
-        const summaryTitle = groupHeading === "h2"
-          ? <Heading className="tour-group-title">{group.title}</Heading>
-          : <span className="tour-group-title">{group.title}</span>;
         return (
           <details className="tour-group" key={group.title} open={index === 0 ? true : undefined}>
             <summary>
-              {summaryTitle}
+              <span className="tour-group-title">{group.title}</span>
             </summary>
             <GroupBody cards={group.cards} />
-            {extra}
           </details>
         );
       })}
-      {after}
     </div>
   );
 }

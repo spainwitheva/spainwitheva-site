@@ -483,7 +483,8 @@ await check("tour pages", async () => {
   assert.ok(index.includes("Puy du Fou: история оживает"));
   assert.ok(index.includes("Обзорная Барселона"));
   assert.ok(index.includes("Валенсия на пересечении эпох"));
-  assert.ok(index.includes("Цена по запросу"));
+  assert.ok(index.includes("цена по запросу"));
+  assert.equal(index.includes("Готический квартал, Пасео-де-Грасия"), false);
   assert.equal(index.includes("Севиль"), false);
   assert.equal(index.includes('class="tour-fallback"'), false);
   const catalogHrefs = [...index.matchAll(/href="([^"]+)"/g)]
@@ -491,8 +492,8 @@ await check("tour pages", async () => {
     .filter((href) => href.includes("wa.me") || href.startsWith("/ekskursii/"))
     .map((href) => decodeURIComponent(href));
   assert.ok(
-    catalogHrefs.some((href) => href.includes("Здравствуйте! Интересует экскурсия: Музей Прадо")),
-    "missing Prado WhatsApp inquiry",
+    catalogHrefs.some((href) => href.includes("Здравствуйте! Интересует экскурсия: Обзорная Барселона")),
+    "missing Barcelona WhatsApp inquiry",
   );
   assert.ok(
     catalogHrefs.some((href) => href.startsWith("https://wa.me/34684762085?text=")),
@@ -665,21 +666,22 @@ await check("no unfinished placeholders", async () => {
   }
   await walk(root);
   const home = await readFile(path.join(root, "index.html"), "utf8");
-  for (const html of [home, await readFile(path.join(root, "ekskursii/index.html"), "utf8")]) {
-    assert.ok(html.includes("/images/tours/cards/izyskannyj-madrid.webp"));
-    assert.ok(html.includes("/images/tours/cards/vkusnyj-madrid.webp"));
-    assert.ok(html.includes("/images/tours/cards/madrid-v-bokale.webp"));
-    assert.ok(html.includes("/images/tours/cards/aristokratichnyj-madrid.webp"));
-    assert.ok(html.includes("/images/tours/cards/segovia-aqueduct.webp"));
-    assert.ok(html.includes("/images/tours/cards/aranjuez-card.webp"));
-    assert.ok(html.includes("/images/tours/cards/escorial-card.webp"));
-    assert.ok(html.includes('alt="Ева в шляпе перед аркадами Королевского дворца в Аранхуэсе"'));
-    assert.ok(html.includes('alt="Ева во дворе монастыря Эскориал, на фоне базилики"'));
-    assert.ok(html.includes('width="1200"'));
-    assert.ok(html.includes('height="800"'));
-    assert.equal(html.includes('class="tour-fallback"'), false);
-    assert.ok(html.includes('loading="lazy"'));
-  }
+  const catalog = await readFile(path.join(root, "ekskursii/index.html"), "utf8");
+  assert.ok(home.includes("/images/tours/cards/izyskannyj-madrid.webp"));
+  assert.ok(home.includes("/images/tours/cards/vkusnyj-madrid.webp"));
+  assert.ok(home.includes("/images/tours/cards/madrid-v-bokale.webp"));
+  assert.ok(home.includes("/images/tours/cards/aristokratichnyj-madrid.webp"));
+  assert.ok(home.includes("/images/tours/cards/segovia-aqueduct.webp"));
+  assert.ok(home.includes("/images/tours/cards/aranjuez-card.webp"));
+  assert.ok(home.includes("/images/tours/cards/escorial-card.webp"));
+  assert.ok(home.includes('alt="Ева в шляпе перед аркадами Королевского дворца в Аранхуэсе"'));
+  assert.ok(home.includes('alt="Ева во дворе монастыря Эскориал, на фоне базилики"'));
+  assert.ok(home.includes('width="1200"'));
+  assert.ok(home.includes('height="800"'));
+  assert.equal(home.includes('class="tour-fallback"'), false);
+  assert.ok(home.includes('loading="lazy"'));
+  assert.equal(catalog.includes("/images/tours/cards/"), false);
+  assert.equal(catalog.includes('class="tour-fallback"'), false);
 });
 
 if (failures.length > 0) {

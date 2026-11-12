@@ -1,6 +1,5 @@
-import { MadridCatalogRows, OtherCitiesGroup } from "../../catalog-list";
+import { ExcursionCatalog } from "../../catalog-list";
 import { GoogleRatingBadge } from "../../review-strip";
-import { TourCardGrid } from "../../tour-cards";
 import { TourFooter, TourHeader } from "../../tour-chrome";
 import { indexJsonLd, indexMetadata } from "../../tour-seo";
 import { evaSurcharge } from "../../tours-data";
@@ -8,7 +7,7 @@ import { evaSurcharge } from "../../tours-data";
 export const metadata = indexMetadata();
 
 const openHashedGroup =
-  "(()=>{var id=location.hash.slice(1);if(!id)return;var el=document.getElementById(decodeURIComponent(id));if(!el)return;for(var n=el;n;n=n.parentElement){if(n.tagName==='DETAILS')n.open=true;}el.scrollIntoView();})();";
+  "(()=>{var id=location.hash.slice(1);if(!id)return;var el=document.getElementById(decodeURIComponent(id));if(!el)return;var panel=el.closest('[data-city]');if(panel){var input=document.querySelector('.city-board input[value=\"'+panel.getAttribute('data-city')+'\"]');if(input)input.checked=true;}for(var n=el;n;n=n.parentElement){if(n.tagName==='DETAILS')n.open=true;}el.scrollIntoView();})();";
 
 export default function ExcursionsIndex() {
   const jsonLd = JSON.stringify(indexJsonLd()).replace(/</g, "\\u003c");
@@ -29,12 +28,7 @@ export default function ExcursionsIndex() {
           Цены за гида команды. {evaSurcharge}. У «Душевного Мадрида» и Толедо есть свои страницы, остальные форматы собираем в переписке.
         </p>
         <GoogleRatingBadge />
-        <TourCardGrid
-          groupHeading="h2"
-          accordion
-          firstGroupExtra={<MadridCatalogRows />}
-          after={<OtherCitiesGroup />}
-        />
+        <ExcursionCatalog />
       </article>
       <TourFooter />
       <script dangerouslySetInnerHTML={{ __html: openHashedGroup }} />

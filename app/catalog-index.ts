@@ -77,19 +77,41 @@ const byTitle = new Map(additions.map((item) => [item.title, item]));
 
 export const madridCatalogAdditions = additions.filter((item) => item.madrid);
 
-export const otherCitySections = (() => {
-  const order: string[] = [];
-  const groups = new Map<string, CatalogListItem[]>();
+const cityChipFor = (item: CatalogListItem): { id: string; label: string } => {
+  if (item.city === "Каталония") return { id: "barcelona", label: "Барселона и Каталония" };
+  if (item.city === "Валенсия") return { id: "valencia", label: "Валенсия" };
+  if (item.city === "Коста-Бланка") return { id: "costa-blanca", label: "Коста-Бланка" };
+  if (item.title.startsWith("Малага")) return { id: "malaga", label: "Малага" };
+  if (item.title.startsWith("Овьедо")) return { id: "oviedo", label: "Овьедо" };
+  if (item.title.includes("Тенерифе")) return { id: "tenerife", label: "Тенерифе" };
+  if (item.title.startsWith("Puy du Fou")) return { id: "puy-du-fou", label: "Puy du Fou" };
+  throw new Error(`No city chip for «${item.title}»`);
+};
+
+const cityChipOrder = [
+  "barcelona",
+  "valencia",
+  "costa-blanca",
+  "malaga",
+  "oviedo",
+  "tenerife",
+  "puy-du-fou",
+];
+
+export const cityChips = (() => {
+  const groups = new Map<string, { id: string; label: string; items: CatalogListItem[] }>();
   for (const item of additions) {
     if (item.madrid) continue;
-    const list = groups.get(item.city);
-    if (list) list.push(item);
-    else {
-      groups.set(item.city, [item]);
-      order.push(item.city);
-    }
+    const chip = cityChipFor(item);
+    const group = groups.get(chip.id);
+    if (group) group.items.push(item);
+    else groups.set(chip.id, { ...chip, items: [item] });
   }
-  return order.map((city) => ({ city, items: groups.get(city)! }));
+  return cityChipOrder.map((id) => {
+    const group = groups.get(id);
+    if (!group) throw new Error(`Missing city chip ${id}`);
+    return group;
+  });
 })();
 
 export const catalogAdditions = additions;
