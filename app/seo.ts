@@ -5,6 +5,9 @@ import { translate, type Locale } from "./translations";
 
 export const SITE_ORIGIN = "https://spainwitheva.com";
 
+/** Languages the guides speak. The Spanish site is a page language, not a tour language. */
+export const guideLanguages = ["ru", "uk", "en"];
+
 const HERO_IMAGE = `${SITE_ORIGIN}/images/hero-eva-madrid.webp`;
 const HERO_ALT = "Ева с чемоданом на одной из исторических улиц Мадрида";
 
@@ -118,6 +121,7 @@ export function businessJsonLd() {
     telephone: "+34 684 76 20 85",
     image: HERO_IMAGE,
     priceRange: `€${min}–€${max}`,
+    availableLanguage: guideLanguages,
     address: {
       "@type": "PostalAddress",
       addressLocality: "Madrid",

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { catalogAdditions } from "./catalog-index";
-import { SITE_ORIGIN } from "./seo";
+import { guideLanguages, SITE_ORIGIN } from "./seo";
 import type { TourPageData } from "./tours-data";
 
 const ICONS = {
@@ -43,7 +43,7 @@ export function tourMetadata(tour: TourPageData): Metadata {
 export function indexMetadata(): Metadata {
   const title = "Экскурсии по Мадриду и поездки из Мадрида с русскоязычным гидом | SpainWithEva";
   const description =
-    "Индивидуальные экскурсии с гидом SpainWithEva по всей Испании: Душевный Мадрид от 200 €, Толедо от 450 € плюс билеты на поезд.";
+    "Индивидуальные экскурсии с гидом SpainWithEva по всей Испании на русском, украинском или английском: Душевный Мадрид от 200 €, Толедо от 450 € плюс билеты на поезд.";
   const url = `${SITE_ORIGIN}/ekskursii/`;
   const image = "https://spainwitheva.com/images/hero-eva-madrid.webp";
 
@@ -108,11 +108,13 @@ export function tourJsonLd(tour: TourPageData) {
         description: tour.metaDescription,
         url,
         touristType: "Индивидуальная экскурсия",
+        availableLanguage: guideLanguages,
         provider: {
           "@type": "TravelAgency",
           name: "SpainWithEva",
           url: `${SITE_ORIGIN}/`,
           telephone: "+34 684 76 20 85",
+          availableLanguage: guideLanguages,
         },
         itinerary: {
           "@type": "ItemList",
