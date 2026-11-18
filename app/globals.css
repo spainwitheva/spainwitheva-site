@@ -540,6 +540,8 @@ footer > p { justify-self: end; margin: 8px 0; }
 .article-body li { margin: 0 0 6px; line-height: 1.55; }
 .article-body a { color: var(--orange); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
 .article-body strong { color: var(--wine); }
+.article-figure { margin: 6px auto 16px; max-width: 520px; }
+.article-figure img { display: block; width: 100%; height: auto; }
 .article-back { margin: 18px 0 0; }
 .article-back a { color: var(--orange); font-weight: 600; }
 @media (max-width: 560px) {

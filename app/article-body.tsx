@@ -39,6 +39,23 @@ function inline(text: string, keyPrefix: string): ReactNode[] {
 }
 
 function renderBlock(block: string, index: number) {
+  const figure = /^!\[([^\]]*)\]\(([^)\s]+)(?:\s+(\d+)x(\d+))?\)$/.exec(block);
+  if (figure) {
+    const width = figure[3] ? Number(figure[3]) : undefined;
+    const height = figure[4] ? Number(figure[4]) : undefined;
+    return (
+      <figure className="article-figure" key={index}>
+        <img
+          src={figure[2]}
+          alt={figure[1]}
+          width={width}
+          height={height}
+          loading="lazy"
+          decoding="async"
+        />
+      </figure>
+    );
+  }
   const lines = block.split("\n");
   const heading = /^(#{1,3}) (.+)$/.exec(lines[0] ?? "");
   if (heading && lines.length === 1) {
