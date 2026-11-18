@@ -240,13 +240,14 @@ await check("sitemap.xml", async () => {
     assert.ok(sitemap.includes(`href="${href}"`), `missing href ${href}`);
   }
   const blocks = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/g)].map((match) => match[1]);
-  assert.equal(blocks.length, 9);
+  assert.equal(blocks.length, 10);
   const singleLanguageLocs = [
     "https://spainwitheva.com/ekskursii/",
     "https://spainwitheva.com/ekskursii/madrid/",
     "https://spainwitheva.com/ekskursii/toledo/",
     "https://spainwitheva.com/stati/",
     "https://spainwitheva.com/stati/chto-posmotret-v-madride-za-1-2-dnya/",
+    "https://spainwitheva.com/stati/chto-posmotret-v-toledo-za-den/",
   ];
   for (const block of blocks) {
     const loc = block.match(/<loc>([^<]+)<\/loc>/)?.[1];
@@ -580,6 +581,76 @@ await check("article pages", async () => {
   assert.ok(index.includes('loading="lazy"'));
   assert.ok(index.includes("11 ноября 2026"));
   assert.match(index, /<html[^>]*\slang=["']ru["']/i);
+
+  const toledo = await readFile(
+    path.join(root, "stati/chto-posmotret-v-toledo-za-den/index.html"),
+    "utf8",
+  );
+  const toledoTitle = "Что посмотреть в Толедо за один день: маршрут гида Евы";
+  const toledoDescription =
+    "Пеший маршрут по Толедо на один день от гида Евы: с чего начать, где пить кофе и есть без туристических ловушек и что успеть из Мадрида.";
+  const toledoCanonical = "https://spainwitheva.com/stati/chto-posmotret-v-toledo-za-den/";
+  const toledoHero = "https://spainwitheva.com/images/articles/toledo-alcazar-hill.webp";
+  const toledoHeroAlt = "Толедо и Алькасар на холме над рекой Тахо";
+
+  assert.equal(decode(toledo.match(/<title>([^<]*)<\/title>/)[1]), toledoTitle);
+  assert.equal(metaContent(toledo, "description", "name"), toledoDescription);
+  const toledoCanonicalLink = tags(toledo, "link").filter((item) => item.rel === "canonical");
+  assert.equal(toledoCanonicalLink.length, 1);
+  assert.equal(toledoCanonicalLink[0].href, toledoCanonical);
+  assert.equal(metaContent(toledo, "og:title", "property"), toledoTitle);
+  assert.equal(metaContent(toledo, "og:description", "property"), toledoDescription);
+  assert.equal(metaContent(toledo, "og:url", "property"), toledoCanonical);
+  assert.equal(metaContent(toledo, "og:type", "property"), "article");
+  assert.equal(metaContent(toledo, "og:image", "property"), toledoHero);
+  assert.equal(metaContent(toledo, "og:image:alt", "property"), toledoHeroAlt);
+  assert.match(toledo, /<html[^>]*\slang=["']ru["']/i);
+  assert.ok(toledo.includes("<h1>Что посмотреть в Толедо за один день</h1>"));
+  assert.ok(toledo.includes('href="/ekskursii/toledo/"'));
+  assert.equal(toledo.includes('href="/ekskursii/toledo/" target='), false);
+  assert.equal(toledo.includes("[Ссылка:"), false);
+  assert.equal(toledo.includes("[Кнопка WhatsApp]"), false);
+  assert.equal(toledo.includes("panorama-alkasar"), false);
+  assert.ok(toledo.includes("Написать в WhatsApp"));
+  assert.ok(toledo.includes('class="tp-cta"'));
+  assert.ok(toledo.includes('loading="eager"'));
+  assert.ok(/fetchpriority="high"/i.test(toledo));
+  assert.equal((toledo.match(/loading="lazy"/g) || []).length, 4);
+  for (const [src, alt] of [
+    ["/images/articles/toledo-eva-street-cathedral.webp", "Ева на узкой улице у собора в Толедо"],
+    ["/images/articles/toledo-eva-narrow-street.webp", "Ева в самом узком переулке Толедо"],
+    ["/images/articles/toledo-eva-hat.webp", "Ева в шляпе на берегу Тахо, на заднем плане монастырь"],
+    ["/images/articles/toledo-eva-terrace.webp", "Ева на смотровой площадке с видом на колокольню собора"],
+  ]) {
+    assert.ok(toledo.includes(src), src);
+    assert.ok(toledo.includes(`alt="${alt}"`), alt);
+    const file = path.join(root, src);
+    assert.ok(statSync(file).size < 150 * 1024, `${src} is ${statSync(file).size}`);
+  }
+  assert.ok(statSync(path.join(root, "/images/articles/toledo-alcazar-hill.webp")).size < 150 * 1024);
+  assert.ok(toledo.includes("18 ноября 2026"));
+  assert.equal(toledo.includes("\u2014"), false);
+
+  const toledoGraph = jsonLdBlocks(toledo).find((block) => Array.isArray(block["@graph"]))["@graph"];
+  const toledoLd = toledoGraph.find((node) => node["@type"] === "Article");
+  const toledoCrumbs = toledoGraph.find((node) => node["@type"] === "BreadcrumbList");
+  assert.equal(toledoLd.headline, toledoTitle);
+  assert.equal(toledoLd.description, toledoDescription);
+  assert.equal(toledoLd.inLanguage, "ru");
+  assert.equal(toledoLd.datePublished, "2026-11-18");
+  assert.equal(toledoLd.author.name, "Eva Sytina");
+  assert.equal(toledoLd.publisher.name, "SpainWithEva");
+  assert.equal(toledoLd.image, toledoHero);
+  assert.equal(toledoCrumbs.itemListElement.length, 3);
+  assert.equal(toledoCrumbs.itemListElement[2].name, "Что посмотреть в Толедо за один день");
+  assert.equal(toledoCrumbs.itemListElement[2].item, toledoCanonical);
+
+  assert.ok(index.includes("Что посмотреть в Толедо за один день"));
+  assert.ok(index.includes(toledoDescription));
+  assert.ok(index.includes('href="/stati/chto-posmotret-v-toledo-za-den/"'));
+  assert.ok(index.includes("/images/articles/toledo-alcazar-hill.webp"));
+  assert.ok(index.includes(toledoHeroAlt));
+  assert.ok(index.includes("18 ноября 2026"));
 });
 
 await check(".htaccess", async () => {
@@ -633,6 +704,7 @@ await check("page sizes", async () => {
     "ekskursii/toledo/index.html",
     "stati/index.html",
     "stati/chto-posmotret-v-madride-za-1-2-dnya/index.html",
+    "stati/chto-posmotret-v-toledo-za-den/index.html",
   ];
   const report = {};
   for (const file of files) {
