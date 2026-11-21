@@ -6,6 +6,7 @@ import {
   waLink,
   type TourCardData,
 } from "./tours-data";
+import { tourEventSlug, umamiWhatsapp } from "./umami";
 
 function CardMedia({ card }: { card: TourCardData }) {
   if (card.photo.src) {
@@ -43,7 +44,9 @@ function TourCard({ card }: { card: TourCardData }) {
         <a
           className="tour-link-more"
           href={href}
-          {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+          {...(external
+            ? { target: "_blank", rel: "noopener noreferrer", ...umamiWhatsapp("tour-card", tourEventSlug(card.id)) }
+            : {})}
         >
           Подробнее
         </a>

@@ -13,6 +13,7 @@ import {
   type TourPageData,
   type TourPhoto,
 } from "./tours-data";
+import { tourEventSlug, umamiWhatsapp } from "./umami";
 
 function Frame({ photo, eager }: { photo: TourPhoto; eager?: boolean }) {
   if (!photo.src) return null;
@@ -43,7 +44,7 @@ export function TourPageView({ tour }: { tour: TourPageData }) {
   return (
     <main className="tp" id="top" lang="ru">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} />
-      <TourHeader />
+      <TourHeader tour={tour.slug} />
       <article className="tp-wrap">
         <nav className="tp-crumbs" aria-label="Хлебные крошки">
           <ol>
@@ -66,7 +67,7 @@ export function TourPageView({ tour }: { tour: TourPageData }) {
               <small>{evaSurcharge}</small>
             </li>
           </ul>
-          <a className="button button-primary" href={wa} target="_blank" rel="noopener noreferrer">
+          <a className="button button-primary" href={wa} target="_blank" rel="noopener noreferrer" {...umamiWhatsapp("tour-page", tour.slug)}>
             Написать в WhatsApp
           </a>
         </div>
@@ -162,7 +163,7 @@ export function TourPageView({ tour }: { tour: TourPageData }) {
               {tour.formats.map((format) => (
                 <li key={format.title}>
                   <strong>{format.title}.</strong> {format.text}{" "}
-                  <a href={waLink(format.waText)} target="_blank" rel="noopener noreferrer">Написать</a>
+                  <a href={waLink(format.waText)} target="_blank" rel="noopener noreferrer" {...umamiWhatsapp("tour-page", tourEventSlug(format.title))}>Написать</a>
                 </li>
               ))}
             </ul>
@@ -175,7 +176,7 @@ export function TourPageView({ tour }: { tour: TourPageData }) {
         <section className="tp-cta">
           <h2>Написать Еве</h2>
           <p>Дата, сколько вас будет, и что хочется увидеть. Ответим и соберём день.</p>
-          <a className="button button-primary" href={wa} target="_blank" rel="noopener noreferrer">
+          <a className="button button-primary" href={wa} target="_blank" rel="noopener noreferrer" {...umamiWhatsapp("tour-page", tour.slug)}>
             Написать в WhatsApp
           </a>
         </section>

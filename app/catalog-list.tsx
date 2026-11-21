@@ -1,5 +1,6 @@
 import { cityChips, madridCatalogAdditions, OTHER_CITIES_ID } from "./catalog-index";
 import { cardGroups, waLink, type TourCardData } from "./tours-data";
+import { tourEventSlug, umamiWhatsapp } from "./umami";
 
 function inquiry(title: string) {
   return `Здравствуйте! Интересует экскурсия: ${title}`;
@@ -17,7 +18,9 @@ function SlimRows({ cards }: { cards: TourCardData[] }) {
           <li key={card.id}>
             <a
               href={href}
-              {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+              {...(external
+                ? { target: "_blank", rel: "noopener noreferrer", ...umamiWhatsapp("tour-card", tourEventSlug(card.id)) }
+                : {})}
             >
               <span className="slim-name">{card.title}</span>
               <span className="slim-meta">{card.meta}</span>
@@ -35,7 +38,7 @@ function MuseumsLine() {
     <div className="museum-block">
       <div className="museum-head">
         <p>Музеи и стадион</p>
-        <a href={waLink(museumsWa)} target="_blank" rel="noopener noreferrer">
+        <a href={waLink(museumsWa)} target="_blank" rel="noopener noreferrer" {...umamiWhatsapp("tour-card", tourEventSlug("музеи и стадион Мадрида"))}>
           WhatsApp <span aria-hidden="true">↗</span>
         </a>
       </div>
@@ -69,7 +72,7 @@ function OtherCities() {
             <ul className="city-names">
               {chip.items.map((item) => (
                 <li id={item.id} key={item.id}>
-                  <a href={waLink(inquiry(item.title))} target="_blank" rel="noopener noreferrer">
+                  <a href={waLink(inquiry(item.title))} target="_blank" rel="noopener noreferrer" {...umamiWhatsapp("tour-card", tourEventSlug(item.title))}>
                     <span>{item.title}</span>
                     <span aria-hidden="true">↗</span>
                   </a>

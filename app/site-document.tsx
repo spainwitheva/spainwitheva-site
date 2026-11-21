@@ -47,6 +47,12 @@ export function SiteDocument({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: jsonLd }}
         />
+        <script
+          defer
+          src="https://cloud.umami.is/script.js"
+          data-website-id="a5c0d0e3-284c-49e2-8d70-6ea205e8da5d"
+          data-domains="spainwitheva.com"
+        />
       </head>
       <body>
         <noscript>

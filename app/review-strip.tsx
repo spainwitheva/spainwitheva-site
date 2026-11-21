@@ -1,8 +1,9 @@
 import { GOOGLE_RATING_LABEL, GOOGLE_REVIEWS_URL, type TourQuote } from "./reviews";
+import { umamiOutbound } from "./umami";
 
 export function GoogleRatingBadge() {
   return (
-    <a className="google-badge" href={GOOGLE_REVIEWS_URL} target="_blank" rel="noopener">
+    <a className="google-badge" href={GOOGLE_REVIEWS_URL} target="_blank" rel="noopener" {...umamiOutbound("google-reviews")}>
       {GOOGLE_RATING_LABEL}
     </a>
   );

@@ -11,6 +11,7 @@ import {
 import { whatsappMessages } from "../../../site-content";
 import { TourFooter, TourHeader } from "../../../tour-chrome";
 import { waLink } from "../../../tours-data";
+import { articleTourSlug, umamiWhatsapp } from "../../../umami";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -45,12 +46,13 @@ export default async function ArticlePage({ params }: Props) {
   if (!article) notFound();
   const jsonLd = JSON.stringify(articleJsonLd(article)).replace(/</g, "\\u003c");
   const wa = waLink(whatsappMessages.ru);
+  const tour = articleTourSlug(article.slug);
   const madridIntro = article.slug === MADRID_ARTICLE_SLUG ? splitIntro(article.body) : null;
 
   return (
     <main className="tp" id="top" lang="ru">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} />
-      <TourHeader />
+      <TourHeader articles tour={tour} />
       <article className="tp-wrap">
         <nav className="tp-crumbs" aria-label="Хлебные крошки">
           <ol>
@@ -82,30 +84,30 @@ export default async function ArticlePage({ params }: Props) {
         {madridIntro ? (
           <>
             <div className="article-body">
-              <ArticleBody markdown={madridIntro.intro} />
+              <ArticleBody markdown={madridIntro.intro} tour={tour} />
             </div>
             <section className="tp-cta article-early-cta">
               <h2>Пройти центр с гидом</h2>
               <p>Это маршрут прогулки «Душевный Мадрид»: около 3 часов, пешком.</p>
               <div className="article-cta-actions">
                 <a className="button button-primary" href="/ekskursii/madrid/">Экскурсия по Мадриду</a>
-                <a className="button button-primary" href={wa} target="_blank" rel="noopener noreferrer">Написать в WhatsApp</a>
+                <a className="button button-primary" href={wa} target="_blank" rel="noopener noreferrer" {...umamiWhatsapp("article", tour)}>Написать в WhatsApp</a>
               </div>
             </section>
             <div className="article-body">
-              <ArticleBody markdown={madridIntro.rest} />
+              <ArticleBody markdown={madridIntro.rest} tour={tour} />
             </div>
           </>
         ) : (
           <div className="article-body">
-            <ArticleBody markdown={article.body} />
+            <ArticleBody markdown={article.body} tour={tour} />
           </div>
         )}
 
         <section className="tp-cta">
           <h2>Написать Еве</h2>
           <p>Дата, сколько вас будет, и что хочется увидеть. Ответим и соберём день.</p>
-          <a className="button button-primary" href={wa} target="_blank" rel="noopener noreferrer">
+          <a className="button button-primary" href={wa} target="_blank" rel="noopener noreferrer" {...umamiWhatsapp("article", tour)}>
             Написать в WhatsApp
           </a>
         </section>

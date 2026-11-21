@@ -1,10 +1,19 @@
 import { AnalyticsAndConsent } from "./analytics-consent";
 import { siteContacts, whatsappMessages } from "./site-content";
 import { waLink } from "./tours-data";
+import { umamiOutbound, umamiWhatsapp } from "./umami";
 
 const headerWa = waLink(whatsappMessages.ru);
 
-export function TourHeader({ index, articles }: { index?: boolean; articles?: boolean }) {
+export function TourHeader({
+  index,
+  articles,
+  tour,
+}: {
+  index?: boolean;
+  articles?: boolean;
+  tour?: string;
+}) {
   return (
     <header className="site-header">
       <a className="logo" href="/" aria-label="SpainWithEva">
@@ -30,7 +39,7 @@ export function TourHeader({ index, articles }: { index?: boolean; articles?: bo
             <a href="/es">ES <small>Español</small></a>
           </nav>
         </details>
-        <a className="header-cta" href={headerWa} target="_blank" rel="noopener noreferrer">
+        <a className="header-cta" href={headerWa} target="_blank" rel="noopener noreferrer" {...umamiWhatsapp("sticky", tour)}>
           WhatsApp
         </a>
       </div>
@@ -43,7 +52,7 @@ export function TourHeader({ index, articles }: { index?: boolean; articles?: bo
           <a href="/#services">Отдых под ключ</a>
           <a href="/stati/">Статьи</a>
           <a href="/#about">О нас</a>
-          <a href={headerWa} target="_blank" rel="noopener noreferrer">Написать в WhatsApp</a>
+          <a href={headerWa} target="_blank" rel="noopener noreferrer" {...umamiWhatsapp("sticky", tour)}>Написать в WhatsApp</a>
         </nav>
       </details>
     </header>
@@ -61,7 +70,7 @@ export function TourFooter() {
         <a href="/#spain">Туры</a>
         <a href="/#camino">Путь Сантьяго</a>
         <a href="/#about">О нас</a>
-        <a href={siteContacts.instagram} target="_blank" rel="noopener noreferrer">Instagram</a>
+        <a href={siteContacts.instagram} target="_blank" rel="noopener noreferrer" {...umamiOutbound("instagram")}>Instagram</a>
       </div>
       <div className="footer-legal">
         <small>© 2026 SpainWithEva · Все права защищены</small>
