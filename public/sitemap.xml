@@ -51,4 +51,40 @@
   <url>
     <loc>https://spainwitheva.com/stati/chto-posmotret-v-toledo-za-den/</loc>
   </url>
+  <url>
+    <loc>https://spainwitheva.com/pravovaya-informaciya/</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://spainwitheva.com/pravovaya-informaciya/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://spainwitheva.com/uk/pravova-informatsiia/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://spainwitheva.com/en/legal/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://spainwitheva.com/es/aviso-legal/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://spainwitheva.com/pravovaya-informaciya/"/>
+    <priority>0.2</priority>
+  </url>
+  <url>
+    <loc>https://spainwitheva.com/uk/pravova-informatsiia/</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://spainwitheva.com/pravovaya-informaciya/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://spainwitheva.com/uk/pravova-informatsiia/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://spainwitheva.com/en/legal/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://spainwitheva.com/es/aviso-legal/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://spainwitheva.com/pravovaya-informaciya/"/>
+    <priority>0.2</priority>
+  </url>
+  <url>
+    <loc>https://spainwitheva.com/en/legal/</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://spainwitheva.com/pravovaya-informaciya/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://spainwitheva.com/uk/pravova-informatsiia/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://spainwitheva.com/en/legal/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://spainwitheva.com/es/aviso-legal/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://spainwitheva.com/pravovaya-informaciya/"/>
+    <priority>0.2</priority>
+  </url>
+  <url>
+    <loc>https://spainwitheva.com/es/aviso-legal/</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://spainwitheva.com/pravovaya-informaciya/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://spainwitheva.com/uk/pravova-informatsiia/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://spainwitheva.com/en/legal/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://spainwitheva.com/es/aviso-legal/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://spainwitheva.com/pravovaya-informaciya/"/>
+    <priority>0.2</priority>
+  </url>
 </urlset>

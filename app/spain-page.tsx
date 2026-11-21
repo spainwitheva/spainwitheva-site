@@ -2,10 +2,11 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
-import { AnalyticsAndConsent } from "./analytics-consent";
+import { LegalFooterNote } from "./legal-footer";
 import { Locale, translate } from "./translations";
 import { alreadyOnExcursionCards, catalogHrefForHome } from "./catalog-index";
 import { faq, formatPrice, journeyTypes, madridCatalogTours, madridTours, siteContacts, siteMedia, spainRegions, spainTours, whatsappMessages } from "./site-content";
+import { tourEventSlug, umamiOutbound, umamiWhatsapp } from "./umami";
 
 function Arrow() {
   return <span aria-hidden="true">↗</span>;
@@ -93,7 +94,7 @@ export function SpainWithEvaPage({
               <a href="/es" className={locale === "es" ? "language-current" : ""} aria-current={locale === "es" ? "page" : undefined}>ES <small>Español</small></a>
             </nav>
           </details>
-          <a className="header-cta" href={whatsappUrl} target="_blank" rel="noreferrer">
+          <a className="header-cta" href={whatsappUrl} target="_blank" rel="noreferrer" {...umamiWhatsapp("sticky")}>
             WhatsApp
           </a>
         </div>
@@ -106,7 +107,7 @@ export function SpainWithEvaPage({
             <a href="#services">{t("Отдых под ключ")}</a>
             {locale === "ru" ? <a href="/stati/">Статьи</a> : null}
             <a href="#about">{t("О нас")}</a>
-            <a href={whatsappUrl} target="_blank" rel="noreferrer">{t("Написать в WhatsApp")}</a>
+            <a href={whatsappUrl} target="_blank" rel="noreferrer" {...umamiWhatsapp("sticky")}>{t("Написать в WhatsApp")}</a>
           </nav>
         </details>
       </header>
@@ -120,7 +121,7 @@ export function SpainWithEvaPage({
           </p>
           <div className="hero-actions">
             <a className="button button-primary" href={locale === "ru" ? "/ekskursii/" : "#journeys"}>{t("Выбрать путешествие")}</a>
-            <a className="button button-outline" href={whatsappUrl} target="_blank" rel="noreferrer">
+            <a className="button button-outline" href={whatsappUrl} target="_blank" rel="noreferrer" {...umamiWhatsapp("hero")}>
               {t("Написать в WhatsApp")}
             </a>
           </div>
@@ -173,7 +174,7 @@ export function SpainWithEvaPage({
           <p className="eyebrow">{t("Мадрид для своих")}</p>
           <h2>{t("Город становится ближе, когда его показывает человек")}</h2>
           <p>{t("Королевские тайны и съёмки «Бумажного дома», старые кондитерские, любимые бары мадридцев и красивые ракурсы — история здесь не отделена от жизни.")}</p>
-          <a className="text-link dark-link" href={whatsappUrl} target="_blank" rel="noreferrer">
+          <a className="text-link dark-link" href={whatsappUrl} target="_blank" rel="noreferrer" {...umamiWhatsapp("tour-card", "madrid")}>
             {t("Подобрать прогулку по Мадриду")} <Arrow />
           </a>
         </div>
@@ -202,7 +203,7 @@ export function SpainWithEvaPage({
                     <span>{t(tour.duration)}</span>
                     <strong>{formatPrice(locale, tour.priceKey)}</strong>
                   </div>
-                  <a href={whatsappUrl} target="_blank" rel="noreferrer" aria-label={`Узнать о маршруте ${tour.title}`}>
+                  <a href={whatsappUrl} target="_blank" rel="noreferrer" aria-label={`Узнать о маршруте ${tour.title}`} {...umamiWhatsapp("tour-card", tourEventSlug(tour.title))}>
                     {t("Узнать детали")} <Arrow />
                   </a>
                 </article>
@@ -223,7 +224,7 @@ export function SpainWithEvaPage({
               <li>{t("50 фотографий в лёгкой цветокоррекции и авторской обработке.")}</li>
               <li>{t("Готовые фотографии в электронном виде в течение пяти дней.")}</li>
             </ul>
-            <a className="button button-outline" href={whatsappUrl} target="_blank" rel="noreferrer">
+            <a className="button button-outline" href={whatsappUrl} target="_blank" rel="noreferrer" {...umamiWhatsapp("tour-card")}>
               {t("Добавить фотосъёмку")}
             </a>
           </div>
@@ -271,7 +272,9 @@ export function SpainWithEvaPage({
                   <span>{t(tour.duration)}</span>
                   <a
                     href={locale === "ru" ? catalogHrefForHome(tour.title) : whatsappUrl}
-                    {...(locale === "ru" ? {} : { target: "_blank", rel: "noreferrer" })}
+                    {...(locale === "ru"
+                      ? {}
+                      : { target: "_blank", rel: "noreferrer", ...umamiWhatsapp("tour-card", tourEventSlug(tour.title)) })}
                     aria-label={`Узнать подробнее об экскурсии «${tour.title}»`}
                   >
                     {t("Узнать подробнее")} <Arrow />
@@ -283,7 +286,7 @@ export function SpainWithEvaPage({
           </div>
           <div className="spain-bottom">
             <p>{t("Соберём маршрут на несколько дней, найдём гидов, жильё, транспорт и те самые места, ради которых поездка становится личной историей.")}</p>
-            <a className="button button-light" href={whatsappUrl} target="_blank" rel="noreferrer">{t("Обсудить будущий тур")}</a>
+            <a className="button button-light" href={whatsappUrl} target="_blank" rel="noreferrer" {...umamiWhatsapp("tour-card")}>{t("Обсудить будущий тур")}</a>
           </div>
         </div>
       </section>
@@ -298,7 +301,7 @@ export function SpainWithEvaPage({
             <li>{t("логистика, бронирования и поддержка;")}</li>
             <li>{t("личное сопровождение по запросу.")}</li>
           </ul>
-          <a className="button button-primary" href={whatsappUrl} target="_blank" rel="noreferrer">{t("Подобрать Путь")}</a>
+          <a className="button button-primary" href={whatsappUrl} target="_blank" rel="noreferrer" {...umamiWhatsapp("footer")}>{t("Подобрать Путь")}</a>
         </div>
         <div className="camino-image">
           <img src={siteMedia.caminoImage} alt={t("Ева идёт по Пути Сантьяго в Галисии")} loading="lazy" />
@@ -321,7 +324,7 @@ export function SpainWithEvaPage({
         <div className="service-note">
           <strong>{formatPrice(locale, "conciergePerDay", true)}</strong>
           <p>{t("Финальная стоимость зависит от длительности и сложности маршрута.")}</p>
-          <a className="text-link" href={whatsappUrl} target="_blank" rel="noreferrer">{t("Запросить план путешествия")} <Arrow /></a>
+          <a className="text-link" href={whatsappUrl} target="_blank" rel="noreferrer" {...umamiWhatsapp("footer")}>{t("Запросить план путешествия")} <Arrow /></a>
         </div>
       </section>
 
@@ -336,9 +339,9 @@ export function SpainWithEvaPage({
           <p>{t('Уже семь лет Испания для меня - и дом, и работа, и бесконечный источник вдохновения. Я - гид, блогер, travel-ведущая и основатель "SpainWithEva". Вместе с командой гидов мы проводим нескучные экскурсии и организуем путешествия по всей стране. Всё легко, вкусно и с вниманием к деталям. Экскурсии ведём на русском, украинском или английском.')}</p>
           <p>{t("Мы умеем говорить об истории без заученных монологов, знаем, где сделать красивый кадр и когда вместо ещё одного музея лучше сесть на террасе с бокалом вина.")}</p>
           <div className="social-links">
-            <a href={siteContacts.instagram} target="_blank" rel="noreferrer">Instagram <Arrow /></a>
+            <a href={siteContacts.instagram} target="_blank" rel="noreferrer" {...umamiOutbound("instagram")}>Instagram <Arrow /></a>
             <a href={siteContacts.youtube} target="_blank" rel="noreferrer">YouTube <Arrow /></a>
-            <a href={siteContacts.telegramChannel} target="_blank" rel="noreferrer">Telegram <Arrow /></a>
+            <a href={siteContacts.telegramChannel} target="_blank" rel="noreferrer" {...umamiOutbound("telegram")}>Telegram <Arrow /></a>
           </div>
         </div>
       </section>
@@ -415,8 +418,8 @@ export function SpainWithEvaPage({
         <h2>{t("Какую Испанию хотите прожить вы?")}</h2>
         <p>{t("Напишите даты, количество путешественников и то, что вам особенно интересно. Мы предложим подходящий формат и всё спокойно обсудим.")}</p>
         <div className="contact-actions">
-          <a className="button button-light" href={whatsappUrl} target="_blank" rel="noreferrer">{t("Написать в WhatsApp")}</a>
-          <a className="button button-ghost" href={siteContacts.telegramContact} target="_blank" rel="noreferrer">{t("Написать в Telegram")}</a>
+          <a className="button button-light" href={whatsappUrl} target="_blank" rel="noreferrer" {...umamiWhatsapp("footer")}>{t("Написать в WhatsApp")}</a>
+          <a className="button button-ghost" href={siteContacts.telegramContact} target="_blank" rel="noreferrer" {...umamiOutbound("telegram")}>{t("Написать в Telegram")}</a>
         </div>
       </section>
 
@@ -430,10 +433,7 @@ export function SpainWithEvaPage({
           <a href="#camino">{t("Путь Сантьяго")}</a>
           <a href="#about">{t("О нас")}</a>
         </div>
-        <div className="footer-legal">
-          <small>{t("© 2026 SpainWithEva · Все права защищены")}</small>
-          <AnalyticsAndConsent locale={locale} />
-        </div>
+        <LegalFooterNote locale={locale} />
       </footer>
 
       <button

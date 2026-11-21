@@ -1,10 +1,11 @@
 import type { ReactNode } from "react";
+import { umamiForHref } from "./umami";
 
 function isExternal(href: string) {
   return /^https?:\/\//i.test(href);
 }
 
-function inline(text: string, keyPrefix: string): ReactNode[] {
+function inline(text: string, keyPrefix: string, tour?: string): ReactNode[] {
   const re = /\*\*([^*]+)\*\*|\[([^\]]+)\]\(([^)\s]+)\)/g;
   const nodes: ReactNode[] = [];
   let last = 0;
@@ -13,13 +14,19 @@ function inline(text: string, keyPrefix: string): ReactNode[] {
     const start = match.index ?? 0;
     if (start > last) nodes.push(text.slice(last, start));
     if (match[1] !== undefined) {
-      nodes.push(<strong key={`${keyPrefix}-b${index}`}>{inline(match[1], `${keyPrefix}-b${index}`)}</strong>);
+      nodes.push(<strong key={`${keyPrefix}-b${index}`}>{inline(match[1], `${keyPrefix}-b${index}`, tour)}</strong>);
     } else {
       const label = match[2];
       const href = match[3];
       if (isExternal(href)) {
         nodes.push(
-          <a key={`${keyPrefix}-a${index}`} href={href} target="_blank" rel="noopener noreferrer">
+          <a
+            key={`${keyPrefix}-a${index}`}
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            {...umamiForHref(href, { place: "article", tour })}
+          >
             {label}
           </a>,
         );
@@ -38,7 +45,7 @@ function inline(text: string, keyPrefix: string): ReactNode[] {
   return nodes;
 }
 
-function renderBlock(block: string, index: number) {
+function renderBlock(block: string, index: number, tour?: string) {
   const figure = /^!\[([^\]]*)\]\(([^)\s]+)(?:\s+(\d+)x(\d+))?\)$/.exec(block);
   if (figure) {
     const width = figure[3] ? Number(figure[3]) : undefined;
@@ -61,13 +68,13 @@ function renderBlock(block: string, index: number) {
   if (heading && lines.length === 1) {
     const level = heading[1].length;
     const Tag = `h${level}` as "h1" | "h2" | "h3";
-    return <Tag key={index}>{inline(heading[2], `h${index}`)}</Tag>;
+    return <Tag key={index}>{inline(heading[2], `h${index}`, tour)}</Tag>;
   }
   if (lines.every((line) => /^[-*] /.test(line))) {
     return (
       <ul key={index}>
         {lines.map((line, item) => (
-          <li key={item}>{inline(line.slice(2), `ul${index}-${item}`)}</li>
+          <li key={item}>{inline(line.slice(2), `ul${index}-${item}`, tour)}</li>
         ))}
       </ul>
     );
@@ -76,15 +83,15 @@ function renderBlock(block: string, index: number) {
     return (
       <ol key={index}>
         {lines.map((line, item) => (
-          <li key={item}>{inline(line.replace(/^\d+\. /, ""), `ol${index}-${item}`)}</li>
+          <li key={item}>{inline(line.replace(/^\d+\. /, ""), `ol${index}-${item}`, tour)}</li>
         ))}
       </ol>
     );
   }
-  return <p key={index}>{inline(lines.join("\n"), `p${index}`)}</p>;
+  return <p key={index}>{inline(lines.join("\n"), `p${index}`, tour)}</p>;
 }
 
-export function ArticleBody({ markdown }: { markdown: string }) {
+export function ArticleBody({ markdown, tour }: { markdown: string; tour?: string }) {
   const blocks = markdown.replace(/\r\n/g, "\n").trim().split(/\n{2,}/);
-  return blocks.filter(Boolean).map((block, index) => renderBlock(block.trim(), index));
+  return blocks.filter(Boolean).map((block, index) => renderBlock(block.trim(), index, tour));
 }
