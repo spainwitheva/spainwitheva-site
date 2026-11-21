@@ -1,4 +1,4 @@
-import { AnalyticsAndConsent } from "./analytics-consent";
+import { LegalFooterNote } from "./legal-footer";
 import { siteContacts, whatsappMessages } from "./site-content";
 import { waLink } from "./tours-data";
 import { umamiOutbound, umamiWhatsapp } from "./umami";
@@ -72,10 +72,7 @@ export function TourFooter() {
         <a href="/#about">О нас</a>
         <a href={siteContacts.instagram} target="_blank" rel="noopener noreferrer" {...umamiOutbound("instagram")}>Instagram</a>
       </div>
-      <div className="footer-legal">
-        <small>© 2026 SpainWithEva · Все права защищены</small>
-        <AnalyticsAndConsent locale="ru" />
-      </div>
+      <LegalFooterNote locale="ru" />
     </footer>
   );
 }

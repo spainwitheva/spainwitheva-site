@@ -240,7 +240,16 @@ await check("sitemap.xml", async () => {
     assert.ok(sitemap.includes(`href="${href}"`), `missing href ${href}`);
   }
   const blocks = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/g)].map((match) => match[1]);
-  assert.equal(blocks.length, 10);
+  assert.equal(blocks.length, 14);
+  const legalLocs = [
+    "https://spainwitheva.com/pravovaya-informaciya/",
+    "https://spainwitheva.com/uk/pravova-informatsiia/",
+    "https://spainwitheva.com/en/legal/",
+    "https://spainwitheva.com/es/aviso-legal/",
+  ];
+  for (const url of legalLocs) {
+    assert.ok(sitemap.includes(`<loc>${url}</loc>`), `missing loc ${url}`);
+  }
   const singleLanguageLocs = [
     "https://spainwitheva.com/ekskursii/",
     "https://spainwitheva.com/ekskursii/madrid/",
@@ -253,6 +262,10 @@ await check("sitemap.xml", async () => {
     const loc = block.match(/<loc>([^<]+)<\/loc>/)?.[1];
     if (singleLanguageLocs.includes(loc)) {
       assert.equal(block.includes("hreflang"), false, `${loc} must not have hreflang`);
+    }
+    if (legalLocs.includes(loc)) {
+      assert.ok(block.includes("<priority>0.2</priority>"), `${loc} priority`);
+      assert.ok(block.includes('hreflang="ru"'), `${loc} hreflang`);
     }
   }
   for (const url of singleLanguageLocs) {

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
-import { AnalyticsAndConsent } from "./analytics-consent";
+import { LegalFooterNote } from "./legal-footer";
 import { Locale, translate } from "./translations";
 import { alreadyOnExcursionCards, catalogHrefForHome } from "./catalog-index";
 import { faq, formatPrice, journeyTypes, madridCatalogTours, madridTours, siteContacts, siteMedia, spainRegions, spainTours, whatsappMessages } from "./site-content";
@@ -433,10 +433,7 @@ export function SpainWithEvaPage({
           <a href="#camino">{t("Путь Сантьяго")}</a>
           <a href="#about">{t("О нас")}</a>
         </div>
-        <div className="footer-legal">
-          <small>{t("© 2026 SpainWithEva · Все права защищены")}</small>
-          <AnalyticsAndConsent locale={locale} />
-        </div>
+        <LegalFooterNote locale={locale} />
       </footer>
 
       <button

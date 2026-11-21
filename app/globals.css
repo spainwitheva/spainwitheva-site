@@ -24,6 +24,7 @@ img { display: block; width: 100%; }
 button, summary, a { -webkit-tap-highlight-color: transparent; }
 :focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; }
 
+.site-header.legal-header { grid-template-columns: 1fr auto; }
 .site-header {
   height: 92px;
   display: grid;
@@ -256,6 +257,8 @@ footer > p { justify-self: end; margin: 8px 0; }
 .footer-links { display: flex; flex-wrap: wrap; gap: 28px; padding-top: 35px; border-top: 1px solid rgba(255,255,255,.17); grid-column: 1 / -1; }
 .footer-legal { grid-column: 1 / -1; margin-top: 35px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; color: #aa9490; }
 .footer-legal small { color: inherit; }
+.footer-legal a { color: inherit; font-size: .72rem; text-decoration: underline; text-underline-offset: 3px; }
+.footer-legal a:hover { color: #eadbd4; }
 .cookie-settings-link { padding: 0; border: 0; background: transparent; color: inherit; font: inherit; font-size: .72rem; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 .cookie-settings-link:hover { color: #eadbd4; }
 .cookie-banner { position: fixed; z-index: 100; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom)); width: min(920px, calc(100vw - 40px)); transform: translateX(-50%); padding: 26px; border: 1px solid var(--sand); border-radius: 10px; background: rgba(255,253,249,.98); color: var(--wine); box-shadow: 0 24px 70px rgba(45,18,20,.25); display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 30px; align-items: center; backdrop-filter: blur(12px); }
