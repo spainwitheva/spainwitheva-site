@@ -1,13 +1,25 @@
 import { catalogAnchor } from "./catalog-index";
 
-export type UmamiPlace = "hero" | "tour-card" | "tour-page" | "article" | "footer" | "sticky";
+export type UmamiPlace =
+  | "hero"
+  | "tour-card"
+  | "tour-page"
+  | "article"
+  | "footer"
+  | "sticky"
+  | "poleznoe";
 
-type UmamiEvent = "whatsapp" | "telegram" | "instagram" | "google-reviews";
+type UmamiEvent = "whatsapp" | "telegram" | "instagram" | "google-reviews" | "partner";
+
+export type UmamiPartnerName = "holafly" | "genki";
+
+export type UmamiPartnerPlace = "poleznoe" | "partners-page" | "article" | "footer";
 
 export type UmamiAttrs = {
   "data-umami-event": UmamiEvent;
-  "data-umami-event-place"?: UmamiPlace;
+  "data-umami-event-place"?: UmamiPlace | UmamiPartnerPlace;
   "data-umami-event-tour"?: string;
+  "data-umami-event-partner"?: UmamiPartnerName;
 };
 
 const tourSlugs: Record<string, string> = {
@@ -52,8 +64,16 @@ export function umamiWhatsapp(place: UmamiPlace, tour?: string): UmamiAttrs {
   };
 }
 
-export function umamiOutbound(event: Exclude<UmamiEvent, "whatsapp">): UmamiAttrs {
+export function umamiOutbound(event: Exclude<UmamiEvent, "whatsapp" | "partner">): UmamiAttrs {
   return { "data-umami-event": event };
+}
+
+export function umamiPartner(partner: UmamiPartnerName, place: UmamiPartnerPlace): UmamiAttrs {
+  return {
+    "data-umami-event": "partner",
+    "data-umami-event-partner": partner,
+    "data-umami-event-place": place,
+  };
 }
 
 export function umamiForHref(

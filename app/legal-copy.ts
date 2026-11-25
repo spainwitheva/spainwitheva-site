@@ -42,7 +42,7 @@ const documents: Record<Locale, LegalDocument> = {
     metaTitle: "Правовая информация | SpainWithEva",
     metaDescription: "Правовая информация и сведения об обработке персональных данных сайта SpainWithEva.",
     title: "Правовая информация",
-    updated: "Обновлено 21 ноября 2026 года.",
+    updated: "Обновлено 25 ноября 2026 года.",
     home: "Главная",
     crumbs: "Хлебные крошки",
     langLabel: "Выбрать язык сайта",
@@ -126,7 +126,16 @@ const documents: Record<Locale, LegalDocument> = {
           },
           {
             type: "p",
-            text: "Внешние ссылки (WhatsApp, Instagram, Google Maps) работают по собственным правилам этих сервисов.",
+            text: "Внешние ссылки (WhatsApp, Instagram, Google Maps и сайты партнёров) работают по собственным правилам этих сервисов.",
+          },
+        ],
+      },
+      {
+        heading: "4. Партнёрские ссылки",
+        blocks: [
+          {
+            type: "p",
+            text: "На сайте могут быть партнёрские ссылки на услуги других компаний, например на eSIM и туристическую страховку. Если вы переходите по такой ссылке и оформляете услугу, мы можем получить комиссию. На цену для вас это не влияет. Партнёрские ссылки на страницах отдельно обозначены. Мы не продаём эти услуги сами и не отвечаем за условия, наличие, покрытие и поддержку партнёра. Перед оплатой проверяйте актуальную информацию на его сайте. Партнёрские ссылки открываются с атрибутом rel=\"sponsored\".",
           },
         ],
       },
@@ -136,7 +145,7 @@ const documents: Record<Locale, LegalDocument> = {
     metaTitle: "Правова інформація | SpainWithEva",
     metaDescription: "Правова інформація та відомості про обробку персональних даних сайту SpainWithEva.",
     title: "Правова інформація",
-    updated: "Оновлено 21 листопада 2026 року.",
+    updated: "Оновлено 25 листопада 2026 року.",
     home: "Головна",
     crumbs: "Навігаційний ланцюжок",
     langLabel: "Обрати мову сайту",
@@ -220,7 +229,16 @@ const documents: Record<Locale, LegalDocument> = {
           },
           {
             type: "p",
-            text: "Зовнішні посилання (WhatsApp, Instagram, Google Maps) працюють за власними правилами цих сервісів.",
+            text: "Зовнішні посилання (WhatsApp, Instagram, Google Maps і сайти партнерів) працюють за власними правилами цих сервісів.",
+          },
+        ],
+      },
+      {
+        heading: "4. Партнерські посилання",
+        blocks: [
+          {
+            type: "p",
+            text: "На сайті можуть бути партнерські посилання на послуги інших компаній, наприклад на eSIM і туристичне страхування. Якщо ви переходите за таким посиланням і оформлюєте послугу, ми можемо отримати комісію. На ціну для вас це не впливає. Партнерські посилання на сторінках окремо позначені. Ми самі ці послуги не продаємо і не відповідаємо за умови, наявність, покриття та підтримку партнера. Перед оплатою перевіряйте актуальну інформацію на його сайті. Партнерські посилання відкриваються з атрибутом rel=\"sponsored\".",
           },
         ],
       },
@@ -230,7 +248,7 @@ const documents: Record<Locale, LegalDocument> = {
     metaTitle: "Legal notice and privacy | SpainWithEva",
     metaDescription: "Legal notice and privacy information for the SpainWithEva website.",
     title: "Legal notice and privacy",
-    updated: "Last updated: 21 November 2026.",
+    updated: "Last updated: 25 November 2026.",
     home: "Home",
     crumbs: "Breadcrumb",
     langLabel: "Choose the site language",
@@ -314,7 +332,16 @@ const documents: Record<Locale, LegalDocument> = {
           },
           {
             type: "p",
-            text: "External links (WhatsApp, Instagram, Google Maps) follow the policies of those services.",
+            text: "External links (WhatsApp, Instagram, Google Maps and partner websites) follow the policies of those services.",
+          },
+        ],
+      },
+      {
+        heading: "4. Partner links",
+        blocks: [
+          {
+            type: "p",
+            text: "The site may contain partner links to services from other companies, for example a travel eSIM and travel insurance. If you follow such a link and purchase the service, we may receive a commission. This does not change the price you pay. Partner links are marked separately on the page. We do not sell these services ourselves and we are not responsible for the partner's terms, availability, coverage or support. Before you pay, check the current information on the partner's website. Partner links open with the rel=\"sponsored\" attribute.",
           },
         ],
       },
@@ -324,7 +351,7 @@ const documents: Record<Locale, LegalDocument> = {
     metaTitle: "Aviso legal y privacidad | SpainWithEva",
     metaDescription: "Aviso legal y política de privacidad del sitio SpainWithEva.",
     title: "Aviso legal y privacidad",
-    updated: "Última actualización: 21 de noviembre de 2026.",
+    updated: "Última actualización: 25 de noviembre de 2026.",
     home: "Inicio",
     crumbs: "Ruta de navegación",
     langLabel: "Elegir el idioma del sitio",
@@ -408,7 +435,16 @@ const documents: Record<Locale, LegalDocument> = {
           },
           {
             type: "p",
-            text: "Los enlaces externos (WhatsApp, Instagram, Google Maps) se rigen por las políticas propias de esos servicios.",
+            text: "Los enlaces externos (WhatsApp, Instagram, Google Maps y los sitios de los colaboradores) se rigen por las políticas propias de esos servicios.",
+          },
+        ],
+      },
+      {
+        heading: "4. Enlaces de afiliados",
+        blocks: [
+          {
+            type: "p",
+            text: "El sitio puede incluir enlaces de afiliados a servicios de otras empresas, por ejemplo una eSIM de viaje y un seguro de viaje. Si usted accede por uno de esos enlaces y contrata el servicio, podemos recibir una comisión. El precio para usted no cambia. Los enlaces de afiliados aparecen señalados en la página. No vendemos estos servicios nosotros y no respondemos de las condiciones, la disponibilidad, la cobertura ni la atención del colaborador. Antes de pagar, compruebe la información actual en el sitio del colaborador. Los enlaces de afiliados se abren con el atributo rel=\"sponsored\".",
           },
         ],
       },
