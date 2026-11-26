@@ -12,8 +12,6 @@ export const PARTNERS_URL = `${SITE_ORIGIN}${PARTNERS_PATH}`;
 export const HOLAFLY_URL =
   "https://holafly.sjv.io/c/8159179/3856277/24764?subId1=site";
 export const GENKI_URL = "https://genki.world/with/spainwitheva";
-export const PROMO_CODE = "SPAINWITHEVA";
-
 export const PARTNERS_H1 = "Полезное для поездки в Испанию";
 export const PARTNERS_TITLE =
   "Полезное для поездки в Испанию: связь и страховка | SpainWithEva";
@@ -24,7 +22,6 @@ export const partnersUi = {
   crumbs: "Хлебные крошки",
   home: "Главная",
   holaflyCta: "Купить eSIM Holafly по партнёрской ссылке",
-  promoLabel: "Промокод:",
   genkiCta: "Оформить Genki Traveler по партнёрской ссылке",
   whatsappCta: "Написать в WhatsApp",
   legalBefore:
@@ -36,7 +33,6 @@ export const partnersUi = {
 export type PartnerBlock =
   | { type: "h2"; text: string }
   | { type: "p"; text: string }
-  | { type: "note"; text: string }
   | { type: "ul"; items: string[] }
   | { type: "holafly" }
   | { type: "genki" }
@@ -47,10 +43,6 @@ export const partnerBlocks: PartnerBlock[] = [
   {
     type: "p",
     text: "Я Ева, живу в Мадриде и вожу гостей. Перед вылетом меня то и дело спрашивают про интернет и страховку, поэтому собрала самое нужное.",
-  },
-  {
-    type: "note",
-    text: "Ссылки на Holafly и Genki на этой странице партнёрские: если ты оформляешь услугу по ним, я могу получить комиссию, на цену для тебя это не влияет.",
   },
   { type: "h2", text: "Интернет в поездке" },
   {

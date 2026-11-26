@@ -3,7 +3,6 @@ import {
   GENKI_URL,
   HOLAFLY_URL,
   PARTNERS_H1,
-  PROMO_CODE,
   partnerBlocks,
   partnersJsonLd,
   partnersMetadata,
@@ -23,12 +22,6 @@ function renderBlock(block: PartnerBlock, index: number, wa: string) {
       return <h2 key={index}>{block.text}</h2>;
     case "p":
       return <p key={index}>{block.text}</p>;
-    case "note":
-      return (
-        <p className="partner-note" key={index}>
-          {block.text}
-        </p>
-      );
     case "ul":
       return (
         <ul key={index}>
@@ -49,9 +42,6 @@ function renderBlock(block: PartnerBlock, index: number, wa: string) {
           >
             {partnersUi.holaflyCta}
           </a>
-          <p className="partner-code">
-            {partnersUi.promoLabel} <code>{PROMO_CODE}</code>
-          </p>
         </div>
       );
     case "genki":

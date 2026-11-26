@@ -708,11 +708,16 @@ await check("partners page", async () => {
   assert.ok(html.includes("<h1>Полезное для поездки в Испанию</h1>"));
   assert.ok(html.includes("Главная"));
   assert.ok(description.length <= 160, `description is ${description.length}`);
-  assert.ok(
+  assert.equal(
     html.includes(
       "Ссылки на Holafly и Genki на этой странице партнёрские: если ты оформляешь услугу по ним, я могу получить комиссию, на цену для тебя это не влияет.",
     ),
+    false,
   );
+  assert.equal(html.includes("partner-note"), false);
+  assert.ok(html.includes("Промокод SPAINWITHEVA: скидка 5% на eSIM для путешествий."));
+  assert.equal(html.includes("Промокод: SPAINWITHEVA"), false);
+  assert.equal(html.includes("partner-code"), false);
   assert.ok(html.includes("Карты России и Беларуси Genki не принимает."));
   assert.equal(html.includes("франшиза"), false);
   assert.equal(html.includes("Orange"), false);
