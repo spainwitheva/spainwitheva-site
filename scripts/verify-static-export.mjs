@@ -240,7 +240,7 @@ await check("sitemap.xml", async () => {
     assert.ok(sitemap.includes(`href="${href}"`), `missing href ${href}`);
   }
   const blocks = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/g)].map((match) => match[1]);
-  assert.equal(blocks.length, 14);
+  assert.equal(blocks.length, 15);
   const legalLocs = [
     "https://spainwitheva.com/pravovaya-informaciya/",
     "https://spainwitheva.com/uk/pravova-informatsiia/",
@@ -257,6 +257,7 @@ await check("sitemap.xml", async () => {
     "https://spainwitheva.com/stati/",
     "https://spainwitheva.com/stati/chto-posmotret-v-madride-za-1-2-dnya/",
     "https://spainwitheva.com/stati/chto-posmotret-v-toledo-za-den/",
+    "https://spainwitheva.com/poleznoe-dlya-poezdki/",
   ];
   for (const block of blocks) {
     const loc = block.match(/<loc>([^<]+)<\/loc>/)?.[1];
@@ -442,7 +443,9 @@ await check("tour pages", async () => {
   assert.ok(home.includes('href="/ekskursii/madrid/"'));
   assert.ok(home.includes('href="/ekskursii/toledo/"'));
   assert.ok(home.includes('href="/stati/"'));
+  assert.equal((home.match(/href="\/poleznoe-dlya-poezdki\/"/g) || []).length, 1);
   assert.ok(madrid.includes('href="/stati/"'));
+  assert.equal((madrid.match(/href="\/poleznoe-dlya-poezdki\/"/g) || []).length, 1);
   assert.ok(home.includes("Сеговия"));
   assert.ok(home.includes("Аранхуэс"));
   assert.ok(home.includes("Эскориал и Долина Павших"));
@@ -484,6 +487,7 @@ await check("tour pages", async () => {
   for (const file of ["en/index.html", "uk/index.html", "es/index.html"]) {
     const html = file === "en/index.html" ? english : await readFile(path.join(root, file), "utf8");
     assert.equal(html.includes('href="/stati/"'), false, file);
+    assert.equal(html.includes("/poleznoe-dlya-poezdki/"), false, file);
     assert.equal(html.includes("Отзывы в Google"), false, file);
     assert.equal(html.includes("Elena Shi"), false, file);
   }
@@ -569,6 +573,14 @@ await check("article pages", async () => {
   assert.ok(article.includes("/images/articles/madrid-balcony-plaza-mayor.webp"));
   assert.ok(article.includes(`alt="${heroAlt}"`));
   assert.ok(article.includes("Их сделала семья Руис де Луна"));
+  assert.ok(article.includes('href="/poleznoe-dlya-poezdki/"'));
+  assert.ok(
+    article.includes(
+      "Если ещё собираешь поездку и думаешь про интернет в телефоне или страховку",
+    ),
+  );
+  assert.equal(article.includes("holafly"), false);
+  assert.equal(article.includes("genki.world"), false);
   assert.equal(article.includes("не для публикации"), false);
   assert.equal(article.includes("SEO-заголовок"), false);
 
@@ -643,6 +655,13 @@ await check("article pages", async () => {
   assert.ok(statSync(path.join(root, "/images/articles/toledo-alcazar-hill.webp")).size < 150 * 1024);
   assert.ok(toledo.includes("18 ноября 2026"));
   assert.equal(toledo.includes("\u2014"), false);
+  assert.ok(toledo.includes("в узких улицах плохо работает навигатор и связь"));
+  assert.ok(toledo.includes('href="/poleznoe-dlya-poezdki/"'));
+  assert.ok(
+    toledo.includes("Если перед выездом из Мадрида или перед прилётом в Испанию"),
+  );
+  assert.equal(toledo.includes("holafly"), false);
+  assert.equal(toledo.includes("genki.world"), false);
 
   const toledoGraph = jsonLdBlocks(toledo).find((block) => Array.isArray(block["@graph"]))["@graph"];
   const toledoLd = toledoGraph.find((node) => node["@type"] === "Article");
@@ -664,6 +683,137 @@ await check("article pages", async () => {
   assert.ok(index.includes("/images/articles/toledo-alcazar-hill.webp"));
   assert.ok(index.includes(toledoHeroAlt));
   assert.ok(index.includes("18 ноября 2026"));
+});
+
+await check("partners page", async () => {
+  const html = await readFile(path.join(root, "poleznoe-dlya-poezdki/index.html"), "utf8");
+  const title = "Полезное для поездки в Испанию: связь и страховка | SpainWithEva";
+  const description =
+    "Как в поездке в Испанию решить интернет и медицинскую страховку. Честно и коротко, от Евы.";
+  const canonical = "https://spainwitheva.com/poleznoe-dlya-poezdki/";
+  const holafly = "https://holafly.sjv.io/c/8159179/3856277/24764?subId1=site";
+  const genki = "https://genki.world/with/spainwitheva";
+
+  assert.equal(decode(html.match(/<title>([^<]*)<\/title>/)[1]), title);
+  assert.equal(metaContent(html, "description", "name"), description);
+  const canonicalLink = tags(html, "link").filter((item) => item.rel === "canonical");
+  assert.equal(canonicalLink.length, 1);
+  assert.equal(canonicalLink[0].href, canonical);
+  assert.equal(metaContent(html, "og:title", "property"), title);
+  assert.equal(metaContent(html, "og:description", "property"), description);
+  assert.equal(metaContent(html, "og:url", "property"), canonical);
+  assert.equal(html.includes("hreflang="), false);
+  assert.equal(html.includes("hrefLang="), false);
+  assert.match(html, /<html[^>]*\slang=["']ru["']/i);
+  assert.ok(html.includes("<h1>Полезное для поездки в Испанию</h1>"));
+  assert.ok(html.includes("Главная"));
+  assert.ok(description.length <= 160, `description is ${description.length}`);
+  assert.equal(
+    html.includes(
+      "Ссылки на Holafly и Genki на этой странице партнёрские: если ты оформляешь услугу по ним, я могу получить комиссию, на цену для тебя это не влияет.",
+    ),
+    false,
+  );
+  assert.equal(html.includes("partner-note"), false);
+  assert.ok(html.includes("Промокод SPAINWITHEVA: скидка 5% на eSIM для путешествий."));
+  assert.equal(html.includes("Промокод: SPAINWITHEVA"), false);
+  assert.equal(html.includes("partner-code"), false);
+  assert.ok(html.includes("Карты России и Беларуси Genki не принимает."));
+  assert.equal(html.includes("франшиза"), false);
+  assert.equal(html.includes("Orange"), false);
+  assert.equal(html.includes("роуминг"), false);
+  assert.ok(html.includes("скидка 5% на eSIM для путешествий"));
+  assert.ok(html.includes("SPAINWITHEVA"));
+  assert.equal(html.includes("10%"), false);
+  assert.equal(html.includes("Holafly Plans"), false);
+  assert.equal(html.includes("несколько раз"), false);
+  assert.equal(html.includes("HOLAFLY_TRACKING_LINK"), false);
+  assert.ok(html.includes('href="/pravovaya-informaciya/"'));
+  assert.equal((html.match(/href="\/poleznoe-dlya-poezdki\/"/g) || []).length, 1);
+
+  function partnerTag(href) {
+    const escaped = href.replace(/[?]/g, "\\?");
+    const match = html.match(new RegExp(`<a\\b[^>]*href="${escaped}"[^>]*>`, "i"));
+    assert.ok(match, href);
+    return match[0];
+  }
+  for (const [href, partner] of [
+    [holafly, "holafly"],
+    [genki, "genki"],
+  ]) {
+    const tag = partnerTag(href);
+    assert.match(tag, /target="_blank"/);
+    assert.match(tag, /rel="sponsored noopener noreferrer"/);
+    assert.match(tag, /data-umami-event="partner"/);
+    assert.match(tag, new RegExp(`data-umami-event-partner="${partner}"`));
+    assert.match(tag, /data-umami-event-place="poleznoe"/);
+  }
+
+  const waTags = [...html.matchAll(/<a\b[^>]*href="https:\/\/wa\.me\/34684762085[^"]*"[^>]*>/g)].map(
+    (match) => match[0],
+  );
+  const pageWa = waTags.find((tag) => tag.includes('data-umami-event-place="poleznoe"'));
+  assert.ok(pageWa, "missing WhatsApp link on the partners page");
+  assert.match(pageWa, /data-umami-event="whatsapp"/);
+  assert.equal(pageWa.includes("sponsored"), false);
+
+  const ld = jsonLdBlocks(html);
+  const page = ld.find((block) => block["@type"] === "WebPage");
+  assert.ok(page, "missing WebPage JSON-LD");
+  assert.equal(page.name, title);
+  assert.equal(page.description, description);
+  assert.equal(page.url, canonical);
+  for (const block of ld) {
+    walk(block, (node) => {
+      const type = node["@type"];
+      const types = Array.isArray(type) ? type : type ? [type] : [];
+      assert.equal(types.includes("FAQPage"), false);
+      assert.equal(types.includes("Product"), false);
+      assert.equal(types.includes("Offer"), false);
+    });
+  }
+});
+
+await check("legal affiliate notice", async () => {
+  const pages = [
+    [
+      "pravovaya-informaciya/index.html",
+      "Обновлено 25 ноября 2026 года.",
+      "21 ноября 2026",
+      "4. Партнёрские ссылки",
+      "сайты партнёров",
+    ],
+    [
+      "uk/pravova-informatsiia/index.html",
+      "Оновлено 25 листопада 2026 року.",
+      "21 листопада 2026",
+      "4. Партнерські посилання",
+      "сайти партнерів",
+    ],
+    [
+      "en/legal/index.html",
+      "Last updated: 25 November 2026.",
+      "21 November 2026",
+      "4. Partner links",
+      "partner websites",
+    ],
+    [
+      "es/aviso-legal/index.html",
+      "Última actualización: 25 de noviembre de 2026.",
+      "21 de noviembre de 2026",
+      "4. Enlaces de afiliados",
+      "sitios de los colaboradores",
+    ],
+  ];
+  for (const [file, updated, oldDate, heading, cookie] of pages) {
+    const html = await readFile(path.join(root, file), "utf8");
+    assert.ok(html.includes(updated), `${file} updated`);
+    assert.equal(html.includes(oldDate), false, `${file} old date`);
+    assert.ok(html.includes(heading), `${file} heading`);
+    assert.ok(html.includes(cookie), `${file} cookie note`);
+    assert.ok(decode(html).includes('rel="sponsored"'), `${file} rel=sponsored`);
+    assert.ok(html.includes("мы можем получить комиссию") || html.includes("ми можемо отримати комісію") || html.includes("we may receive a commission") || html.includes("podemos recibir una comisión"), `${file} commission`);
+  }
 });
 
 await check(".htaccess", async () => {
@@ -718,6 +868,7 @@ await check("page sizes", async () => {
     "stati/index.html",
     "stati/chto-posmotret-v-madride-za-1-2-dnya/index.html",
     "stati/chto-posmotret-v-toledo-za-den/index.html",
+    "poleznoe-dlya-poezdki/index.html",
   ];
   const report = {};
   for (const file of files) {
@@ -774,4 +925,4 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
-console.log("Static export SEO checks passed for home pages, tour pages, robots.txt, sitemap.xml and .htaccess.");
+console.log("Static export SEO checks passed for home pages, tour pages, articles, the partners page, legal pages, robots.txt, sitemap.xml and .htaccess.");

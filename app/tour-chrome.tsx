@@ -67,6 +67,7 @@ export function TourFooter() {
       <div className="footer-links">
         <a href="/ekskursii/">Экскурсии</a>
         <a href="/stati/">Статьи</a>
+        <a href="/poleznoe-dlya-poezdki/">Полезное для поездки</a>
         <a href="/#spain">Туры</a>
         <a href="/#camino">Путь Сантьяго</a>
         <a href="/#about">О нас</a>

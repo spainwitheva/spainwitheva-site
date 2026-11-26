@@ -429,6 +429,7 @@ export function SpainWithEvaPage({
         <div className="footer-links">
           <a href="#excursions">{t("Экскурсии")}</a>
           {locale === "ru" ? <a href="/stati/">Статьи</a> : null}
+          {locale === "ru" ? <a href="/poleznoe-dlya-poezdki/">Полезное для поездки</a> : null}
           <a href="#spain">{t("Туры")}</a>
           <a href="#camino">{t("Путь Сантьяго")}</a>
           <a href="#about">{t("О нас")}</a>
