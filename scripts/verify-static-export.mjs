@@ -689,7 +689,7 @@ await check("partners page", async () => {
   const html = await readFile(path.join(root, "poleznoe-dlya-poezdki/index.html"), "utf8");
   const title = "Полезное для поездки в Испанию: связь и страховка | SpainWithEva";
   const description =
-    "Как в поездке в Испанию решить интернет и медицинскую страховку: чем eSIM отличается от местной SIM и роуминга, что проверить в полисе. Честно и коротко, от Евы.";
+    "Как в поездке в Испанию решить интернет и медицинскую страховку. Честно и коротко, от Евы.";
   const canonical = "https://spainwitheva.com/poleznoe-dlya-poezdki/";
   const holafly = "https://holafly.sjv.io/c/8159179/3856277/24764?subId1=site";
   const genki = "https://genki.world/with/spainwitheva";
@@ -707,11 +707,16 @@ await check("partners page", async () => {
   assert.match(html, /<html[^>]*\slang=["']ru["']/i);
   assert.ok(html.includes("<h1>Полезное для поездки в Испанию</h1>"));
   assert.ok(html.includes("Главная"));
+  assert.ok(description.length <= 160, `description is ${description.length}`);
   assert.ok(
     html.includes(
-      "Ссылки на Holafly и Genki на этой странице партнёрские. Если ты оформляешь услугу по ним, я могу получить комиссию.",
+      "Ссылки на Holafly и Genki на этой странице партнёрские: если ты оформляешь услугу по ним, я могу получить комиссию, на цену для тебя это не влияет.",
     ),
   );
+  assert.ok(html.includes("Карты России и Беларуси Genki не принимает."));
+  assert.equal(html.includes("франшиза"), false);
+  assert.equal(html.includes("Orange"), false);
+  assert.equal(html.includes("роуминг"), false);
   assert.ok(html.includes("скидка 5% на eSIM для путешествий"));
   assert.ok(html.includes("SPAINWITHEVA"));
   assert.equal(html.includes("10%"), false);
