@@ -393,8 +393,6 @@ footer > p { justify-self: end; margin: 8px 0; }
 .tour-group > summary .tour-group-title { margin: 0; }
 .tour-group > summary::after { content: ""; width: 9px; height: 9px; border-right: 2px solid var(--wine); border-bottom: 2px solid var(--wine); transform: rotate(45deg); flex: none; margin-top: -4px; }
 .tour-group[open] > summary::after { transform: rotate(-135deg); margin-top: 4px; }
-.tour-group-eva { margin: 0 0 12px; color: #8a6552; font-size: .82rem; }
-.tour-card-eva { margin: 0; color: #8a6552; font-size: .78rem; }
 .tour-link-grid { display: grid; grid-auto-flow: column; grid-auto-columns: 78%; gap: 12px; overflow-x: auto; overscroll-behavior-inline: contain; scroll-snap-type: x mandatory; padding-bottom: 8px; scrollbar-width: thin; }
 .tour-link-card { position: relative; background: var(--paper); border: 1px solid var(--soft-sand); display: flex; flex-direction: column; min-width: 0; scroll-snap-align: start; }
 .tour-link-media { position: relative; aspect-ratio: 3 / 2; overflow: hidden; background: var(--soft-sand); }

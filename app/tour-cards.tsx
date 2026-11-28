@@ -1,7 +1,6 @@
 import { GoogleRatingBadge } from "./review-strip";
 import {
   cardGroups,
-  evaSurcharge,
   otherCitiesNote,
   waLink,
   type TourCardData,
@@ -29,7 +28,7 @@ function CardMedia({ card }: { card: TourCardData }) {
   );
 }
 
-function TourCard({ card, surcharge }: { card: TourCardData; surcharge?: boolean }) {
+function TourCard({ card }: { card: TourCardData }) {
   const href = card.href ?? waLink(card.waText);
   const external = !card.href;
   return (
@@ -41,7 +40,6 @@ function TourCard({ card, surcharge }: { card: TourCardData; surcharge?: boolean
         <h3>{card.title}</h3>
         <p className="tour-link-why">{card.why}</p>
         <p className="tour-link-meta">{card.meta}</p>
-        {surcharge ? <p className="tour-card-eva">{evaSurcharge}</p> : null}
         <a
           className="tour-link-more"
           href={href}
@@ -57,20 +55,12 @@ function TourCard({ card, surcharge }: { card: TourCardData; surcharge?: boolean
 }
 
 function GroupBody({ cards }: { cards: TourCardData[] }) {
-  const sharedSurcharge = cards.every((card) => card.showEvaSurcharge !== false);
   return (
-    <>
-      {sharedSurcharge ? <p className="tour-group-eva">{evaSurcharge}</p> : null}
-      <div className="tour-link-grid">
-        {cards.map((card) => (
-          <TourCard
-            card={card}
-            key={card.id}
-            surcharge={!sharedSurcharge && card.showEvaSurcharge !== false}
-          />
-        ))}
-      </div>
-    </>
+    <div className="tour-link-grid">
+      {cards.map((card) => (
+        <TourCard card={card} key={card.id} />
+      ))}
+    </div>
   );
 }
 

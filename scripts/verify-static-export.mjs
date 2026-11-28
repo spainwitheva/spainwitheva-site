@@ -369,7 +369,9 @@ await check("tour pages", async () => {
   for (const html of [madrid, toledo]) {
     assert.ok(html.includes("Место встречи согласуем в WhatsApp"));
     assert.equal(html.includes("[УТОЧНИТЬ"), false);
-    assert.ok(html.includes("лично с Евой +50 €"));
+    assert.equal(html.includes("лично с Евой +50 €"), false);
+    assert.equal(html.includes("Лично с Евой +50 €"), false);
+    assert.equal(html.includes("за гида команды"), false);
     assert.ok(html.includes("Предоплата (сумма по договорённости) входит в стоимость экскурсии"));
     assert.ok(html.includes("за 14 дней и ранее: полный возврат;"));
     assert.ok(html.includes("за 7–13 дней: возврат 50% предоплаты;"));
@@ -533,7 +535,9 @@ await check("tour pages", async () => {
   assert.ok(segoviaCard, "missing Segovia home card");
   assert.equal(segoviaCard.includes("лично с Евой +50 €"), false);
   assert.ok(segoviaCard.includes("от 450 €"));
-  assert.ok(toledoCard.includes("лично с Евой +50 €"));
+  assert.equal(toledoCard.includes("лично с Евой +50 €"), false);
+  assert.equal(home.includes("лично с Евой +50 €"), false);
+  assert.equal(index.includes("лично с Евой +50 €"), false);
   assert.ok(home.includes('href="/stati/"'));
   assert.equal((home.match(/href="\/poleznoe-dlya-poezdki\/"/g) || []).length, 1);
   assert.ok(madrid.includes('href="/stati/"'));

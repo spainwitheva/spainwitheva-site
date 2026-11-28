@@ -5,7 +5,6 @@ import {
   bookingTerms,
   cultureNote,
   evaPortrait,
-  evaSurcharge,
   paidByGuests,
   priceIncludes,
   privateGroup,
@@ -64,7 +63,6 @@ export function TourPageView({ tour }: { tour: TourPageData }) {
             <li>
               <span>Цена</span>
               <strong>{tour.priceLabel}</strong>
-              {tour.showEvaSurcharge === false ? null : <small>{evaSurcharge}</small>}
             </li>
           </ul>
           <a className="button button-primary" href={wa} target="_blank" rel="noopener noreferrer" {...umamiWhatsapp("tour-page", tour.slug)}>
@@ -162,7 +160,6 @@ export function TourPageView({ tour }: { tour: TourPageData }) {
         {tour.formats ? (
           <section className="tp-block">
             <h2>Другие форматы по Мадриду</h2>
-            <p className="tp-note">Цены за гида команды. {evaSurcharge}.</p>
             <ul className="tp-formats">
               {tour.formats.map((format) => (
                 <li key={format.title}>

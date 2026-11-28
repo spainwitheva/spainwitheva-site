@@ -4,11 +4,9 @@ import { madridQuote, toledoQuote } from "./reviews";
 
 /**
  * Факты каталога владельца, октябрь 2026.
- * Цены ниже за гида команды. Лично с Евой +50 €.
  * Короткие цитаты берутся из reviews.ts.
  */
 
-export const evaSurcharge = "лично с Евой +50 €";
 export const otherCitiesNote = "Работаем и в других городах Испании.";
 export const privateGroup = "Только ваша компания, без чужих людей.";
 export const cultureNote = "Формат культурный и исторический, без современных политических тем.";
@@ -75,8 +73,6 @@ export type TourCardData = {
   photo: TourPhoto;
   href?: string;
   waText: string;
-  /** When false, this card is outside the shared «лично с Евой +50 €» note. */
-  showEvaSurcharge?: boolean;
 };
 
 export type TourPageData = {
@@ -90,8 +86,6 @@ export type TourPageData = {
   group: string;
   priceLabel: string;
   priceAmount: string;
-  /** When false, the shared «лично с Евой +50 €» line is not shown. */
-  showEvaSurcharge?: boolean;
   /** Overrides the shared «Входит» line. */
   includes?: string;
   /**
@@ -147,7 +141,7 @@ export const tourPages: TourPageData[] = [
     priceLabel: "от 200 €",
     priceAmount: "200",
     offerDescription:
-      "от 200 € за гида команды, около 3 часов. Лично с Евой +50 €. Еда, напитки, билеты и транспорт оплачиваются отдельно.",
+      "от 200 €, около 3 часов. Еда, напитки, билеты и транспорт оплачиваются отдельно.",
     metaTitle: "Индивидуальная экскурсия по Мадриду с русскоязычным гидом | SpainWithEva",
     metaDescription:
       "Душевный Мадрид: пешая прогулка по историческому центру на русском, украинском или английском, около 3 часов, от 200 €. Королевский дворец снаружи, Пласа Майор, старые улочки, рынок Сан-Мигель.",
@@ -223,7 +217,7 @@ export const tourPages: TourPageData[] = [
       {
         question: "Сколько стоит и что входит в цену?",
         answer:
-          "Около 3 часов, пешком, от 200 € за гида команды. Лично с Евой +50 €. В цену входят работа гида и подготовленный маршрут. Еду, напитки, входные билеты и транспорт гости оплачивают отдельно, за себя и за гида.",
+          "Около 3 часов, пешком, от 200 €. В цену входят работа гида и подготовленный маршрут. Еду, напитки, входные билеты и транспорт гости оплачивают отдельно, за себя и за гида.",
       },
       {
         question: bookingTerms.faqQuestion,
@@ -288,7 +282,7 @@ export const tourPages: TourPageData[] = [
     priceLabel: "от 450 € + билеты на поезд",
     priceAmount: "450",
     offerDescription:
-      "от 450 € за гида команды плюс билеты на поезд или трансфер. Лично с Евой +50 €. Еда, напитки и входные билеты оплачиваются отдельно.",
+      "от 450 € плюс билеты на поезд или трансфер. Еда, напитки и входные билеты оплачиваются отдельно.",
     metaTitle: "Индивидуальная экскурсия в Толедо из Мадрида на русском | SpainWithEva",
     metaDescription:
       "Поездка в Толедо на целый день с гидом на русском, украинском или английском. От 450 € плюс билеты на поезд, обратно в Мадрид около 17:00. Замок Алькасар, собор, дом-музей Эль Греко.",
@@ -349,7 +343,7 @@ export const tourPages: TourPageData[] = [
       {
         question: "Сколько стоит и что входит в цену?",
         answer:
-          "Полный день, от 450 € за гида команды плюс билеты на поезд. Лично с Евой +50 €. В цену входят работа гида и подготовленный маршрут. Еду, напитки, входные билеты и транспорт, включая поезд или трансфер, гости оплачивают отдельно, за себя и за гида.",
+          "Полный день, от 450 € плюс билеты на поезд. В цену входят работа гида и подготовленный маршрут. Еду, напитки, входные билеты и транспорт, включая поезд или трансфер, гости оплачивают отдельно, за себя и за гида.",
       },
       {
         question: "Как добираемся и во сколько обратно?",
@@ -394,7 +388,6 @@ export const tourPages: TourPageData[] = [
     group: "только ваша компания",
     priceLabel: "от 450 €",
     priceAmount: "450",
-    showEvaSurcharge: false,
     showPrivateGroup: false,
     showCultureNote: false,
     includes: "Я, ваш гид на русском, и подготовленный маршрут.",
@@ -607,7 +600,6 @@ export const cardGroups: Array<{ title: string; cards: TourCardData[] }> = [
         id: "segovia",
         title: "Сеговия",
         why: "Алькасар, средневековые улицы и римский акведук.",
-        showEvaSurcharge: false,
         meta: "выезд 10:30 · от 450 €",
         photo: {
           src: "/images/tours/cards/segovia-aqueduct-plaza.webp",
