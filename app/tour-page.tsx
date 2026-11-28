@@ -5,7 +5,6 @@ import {
   bookingTerms,
   cultureNote,
   evaPortrait,
-  evaSurcharge,
   paidByGuests,
   priceIncludes,
   privateGroup,
@@ -64,23 +63,24 @@ export function TourPageView({ tour }: { tour: TourPageData }) {
             <li>
               <span>Цена</span>
               <strong>{tour.priceLabel}</strong>
-              <small>{evaSurcharge}</small>
             </li>
           </ul>
           <a className="button button-primary" href={wa} target="_blank" rel="noopener noreferrer" {...umamiWhatsapp("tour-page", tour.slug)}>
             Написать в WhatsApp
           </a>
         </div>
-        <p className="tp-note">{privateGroup}</p>
-        <p className="tp-note">{cultureNote}</p>
+        {tour.showPrivateGroup === false ? null : <p className="tp-note">{privateGroup}</p>}
+        {tour.showCultureNote === false ? null : <p className="tp-note">{cultureNote}</p>}
 
         <div className="tp-gallery">
           <Frame photo={tour.hero} eager />
-          <div className="tp-film">
-            {tour.photos.map((photo) => (
-              <Frame photo={photo} key={photo.src} />
-            ))}
-          </div>
+          {tour.photos.length > 0 ? (
+            <div className="tp-film">
+              {tour.photos.map((photo) => (
+                <Frame photo={photo} key={photo.src} />
+              ))}
+            </div>
+          ) : null}
           {tour.photoNote ? <p className="tp-gap">{tour.photoNote}</p> : null}
         </div>
 
@@ -102,13 +102,15 @@ export function TourPageView({ tour }: { tour: TourPageData }) {
           <div className="tp-split">
             <div>
               <h2>Входит</h2>
-              <p>{priceIncludes}</p>
+              <p>{tour.includes ?? priceIncludes}</p>
             </div>
-            <div>
-              <h2>Оплачивается отдельно</h2>
-              <p>{paidByGuests}</p>
-              {tour.separateNote ? <p>{tour.separateNote}</p> : null}
-            </div>
+            {tour.paidSeparately === false ? null : (
+              <div>
+                <h2>Оплачивается отдельно</h2>
+                <p>{tour.paidSeparately ?? paidByGuests}</p>
+                {tour.separateNote ? <p>{tour.separateNote}</p> : null}
+              </div>
+            )}
           </div>
         </section>
 
@@ -158,7 +160,6 @@ export function TourPageView({ tour }: { tour: TourPageData }) {
         {tour.formats ? (
           <section className="tp-block">
             <h2>Другие форматы по Мадриду</h2>
-            <p className="tp-note">Цены за гида команды. {evaSurcharge}.</p>
             <ul className="tp-formats">
               {tour.formats.map((format) => (
                 <li key={format.title}>
@@ -171,7 +172,7 @@ export function TourPageView({ tour }: { tour: TourPageData }) {
           </section>
         ) : null}
 
-        <TourQuoteBlock quote={tour.quote} />
+        {tour.quote ? <TourQuoteBlock quote={tour.quote} /> : null}
 
         <section className="tp-cta">
           <h2>Написать Еве</h2>

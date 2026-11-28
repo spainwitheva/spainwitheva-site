@@ -240,7 +240,7 @@ await check("sitemap.xml", async () => {
     assert.ok(sitemap.includes(`href="${href}"`), `missing href ${href}`);
   }
   const blocks = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/g)].map((match) => match[1]);
-  assert.equal(blocks.length, 15);
+  assert.equal(blocks.length, 16);
   const legalLocs = [
     "https://spainwitheva.com/pravovaya-informaciya/",
     "https://spainwitheva.com/uk/pravova-informatsiia/",
@@ -254,6 +254,7 @@ await check("sitemap.xml", async () => {
     "https://spainwitheva.com/ekskursii/",
     "https://spainwitheva.com/ekskursii/madrid/",
     "https://spainwitheva.com/ekskursii/toledo/",
+    "https://spainwitheva.com/ekskursii/segovia/",
     "https://spainwitheva.com/stati/",
     "https://spainwitheva.com/stati/chto-posmotret-v-madride-za-1-2-dnya/",
     "https://spainwitheva.com/stati/chto-posmotret-v-toledo-za-den/",
@@ -302,6 +303,7 @@ function assertNoReviewMarkup(data, label) {
 await check("tour pages", async () => {
   const madrid = await readFile(path.join(root, "ekskursii/madrid/index.html"), "utf8");
   const toledo = await readFile(path.join(root, "ekskursii/toledo/index.html"), "utf8");
+  const segovia = await readFile(path.join(root, "ekskursii/segovia/index.html"), "utf8");
   const index = await readFile(path.join(root, "ekskursii/index.html"), "utf8");
   const home = await readFile(path.join(root, "index.html"), "utf8");
   const english = await readFile(path.join(root, "en/index.html"), "utf8");
@@ -367,7 +369,9 @@ await check("tour pages", async () => {
   for (const html of [madrid, toledo]) {
     assert.ok(html.includes("Место встречи согласуем в WhatsApp"));
     assert.equal(html.includes("[УТОЧНИТЬ"), false);
-    assert.ok(html.includes("лично с Евой +50 €"));
+    assert.equal(html.includes("лично с Евой +50 €"), false);
+    assert.equal(html.includes("Лично с Евой +50 €"), false);
+    assert.equal(html.includes("за гида команды"), false);
     assert.ok(html.includes("Предоплата (сумма по договорённости) входит в стоимость экскурсии"));
     assert.ok(html.includes("за 14 дней и ранее: полный возврат;"));
     assert.ok(html.includes("за 7–13 дней: возврат 50% предоплаты;"));
@@ -440,8 +444,100 @@ await check("tour pages", async () => {
   assert.equal(toledo.includes("Александр Барабан"), false);
   assert.equal(toledo.includes("Мадрид,Толедо с Евой!!!"), false);
 
+  const segoviaTitle = "Индивидуальная экскурсия в Сеговию из Мадрида на русском | SpainWithEva";
+  const segoviaCanonical = "https://spainwitheva.com/ekskursii/segovia/";
+  assert.equal(decode(segovia.match(/<title>([^<]*)<\/title>/)[1]), segoviaTitle);
+  assert.equal(metaContent(segovia, "description", "name"), "Индивидуальная экскурсия в Сеговию из Мадрида на русском. Выезд в 10:30, обратно в 17:00, от 450 €. Алькасар, средневековые улицы и римский акведук.");
+  assert.equal(metaContent(segovia, "og:url", "property"), segoviaCanonical);
+  assert.equal(metaContent(segovia, "og:image", "property"), "https://spainwitheva.com/images/tours/segovia/segovia-eva-alcazar-wall.webp");
+  assert.equal(metaContent(segovia, "og:image:alt", "property"), "Ева на стене Алькасара в Сеговии");
+  assert.equal(segovia.includes("hreflang="), false);
+  assert.ok(segovia.includes("<h1>Индивидуальная экскурсия в Сеговию из Мадрида на русском</h1>"));
+  assert.ok(segovia.includes("от 450 €"));
+  assert.equal(segovia.includes("лично с Евой +50 €"), false);
+  assert.ok(segovia.includes("Оплачивается отдельно"));
+  assert.ok(segovia.includes("Я, ваш гид на русском, и подготовленный маршрут."));
+  assert.ok(segovia.includes("Билеты на поезд или трансфер, вход в Алькасар, обед и вино оплачиваются отдельно, за вас и за гида."));
+  assert.ok(segovia.includes("Покажу вам Сеговию сама, на русском."));
+  assert.equal(segovia.includes("тебе"), false);
+  assert.equal(segovia.includes("твой"), false);
+  assert.equal(segovia.includes("Попробуй"), false);
+  assert.ok(segovia.includes(">только ваша компания<"));
+  assert.equal(segovia.includes("Только ваша компания, без чужих людей."), false);
+  assert.equal(segovia.includes("Формат культурный и исторический"), false);
+  assert.equal(segovia.includes("не туристическ"), false);
+  assert.ok(segovia.includes("Говорят, этот замок вдохновил Уолта Диснея."));
+  assert.ok(segovia.includes("один из лучше всего сохранившихся римских акведуков"));
+  assert.ok(segovia.includes("шефа Оскара, которого знает вся Испания"));
+  assert.equal(segovia.includes("ресторан"), false);
+  assert.ok(segovia.includes("Кочинильо, молочный поросёнок и блюда региона"));
+  assert.equal(segovia.includes("крупнейш"), false);
+  assert.equal(segovia.includes("самый большой"), false);
+  assert.equal(segovia.includes("—"), false);
+  assert.ok(segovia.includes(encodeURIComponent("Привет! Хочу индивидуальную экскурсию в Сеговию из Мадрида. Дата: , нас будет: ")));
+  assert.ok(segovia.includes('data-umami-event="whatsapp"'));
+  assert.ok(segovia.includes('data-umami-event-tour="segovia"'));
+  assert.ok(segovia.includes('data-umami-event-place="tour-page"'));
+  assert.equal(segovia.includes("Jeyla Huseynova"), false);
+  assert.equal(segovia.includes("Elena Shi"), false);
+  assert.equal(segovia.includes("★ 5,0"), false);
+  assert.ok(segovia.includes("/images/tours/segovia/segovia-eva-alcazar-wall.webp"));
+  assert.ok(segovia.includes('alt="Ева на стене Алькасара в Сеговии"'));
+  const heroTag = segovia.match(/<img\b[^>]*src="\/images\/tours\/segovia\/segovia-eva-alcazar-wall.webp"[^>]*>/);
+  assert.ok(heroTag, "missing hero img");
+  assert.match(heroTag[0], /loading="eager"/);
+  assert.match(heroTag[0], /object-position:\s*center 40%/);
+  for (const src of [
+    "/images/tours/segovia/segovia-aqueduct-arches.webp",
+    "/images/tours/segovia/segovia-aqueduct-plaza.webp",
+    "/images/tours/segovia/segovia-alcazar-hill.webp",
+    "/images/tours/segovia/segovia-eva-alcazar-battlements.webp",
+    "/images/tours/segovia/segovia-chef-oscar-cochinillo.webp",
+    "/images/tours/segovia/segovia-eva-lunch-wine.webp",
+    "/images/tours/segovia/segovia-group-alcazar.webp",
+  ]) {
+    const tag = segovia.match(new RegExp(`<img\\b[^>]*src="${src}"[^>]*>`));
+    assert.ok(tag, src);
+    assert.match(tag[0], /loading="lazy"/);
+  }
+  assert.equal(segovia.includes("/images/tours/cards/segovia-aqueduct.webp"), false);
+  assert.ok(segovia.includes("/images/eva/portrait.webp"));
+  const segoviaLd = jsonLdBlocks(segovia).find((block) => Array.isArray(block["@graph"]));
+  assertNoReviewMarkup(segoviaLd, "segovia");
+  const segoviaGraph = segoviaLd["@graph"];
+  const segoviaProduct = segoviaGraph.find((node) => node["@type"] === "Product");
+  const segoviaTrip = segoviaGraph.find((node) => node["@type"] === "TouristTrip");
+  const segoviaCrumbs = segoviaGraph.find((node) => node["@type"] === "BreadcrumbList");
+  const segoviaFaq = segoviaGraph.find((node) => node["@type"] === "FAQPage");
+  assert.equal(segoviaProduct.offers["@type"], "Offer");
+  assert.equal(segoviaProduct.offers.price, "450");
+  assert.equal(segoviaProduct.offers.priceCurrency, "EUR");
+  assert.equal(
+    segoviaProduct.offers.description,
+    "от 450 € за работу гида Евы. Билеты на поезд или трансфер, вход в Алькасар, обед и вино оплачиваются отдельно.",
+  );
+  assert.equal(segoviaTrip["@type"], "TouristTrip");
+  assert.equal(segoviaTrip.image, "https://spainwitheva.com/images/tours/segovia/segovia-eva-alcazar-wall.webp");
+  assert.equal(segoviaProduct.image, segoviaTrip.image);
+  assert.equal(segoviaTrip.itinerary.itemListElement.length, 6);
+  assert.equal(segoviaCrumbs.itemListElement[2].name, "Сеговия");
+  assert.equal(segoviaCrumbs.itemListElement[2].item, segoviaCanonical);
+  assert.equal(segoviaFaq.mainEntity.length, 4);
+  assert.ok(madrid.includes('href="/ekskursii/segovia/"'));
+  assert.ok(toledo.includes('href="/ekskursii/segovia/"'));
+
   assert.ok(home.includes('href="/ekskursii/madrid/"'));
   assert.ok(home.includes('href="/ekskursii/toledo/"'));
+  assert.ok(home.includes('href="/ekskursii/segovia/"'));
+  const homeCards = [...home.matchAll(/<article class="tour-link-card">([\s\S]*?)<\/article>/g)].map((match) => match[1]);
+  const segoviaCard = homeCards.find((card) => card.includes("<h3>Сеговия</h3>"));
+  const toledoCard = homeCards.find((card) => card.includes("<h3>Толедо</h3>"));
+  assert.ok(segoviaCard, "missing Segovia home card");
+  assert.equal(segoviaCard.includes("лично с Евой +50 €"), false);
+  assert.ok(segoviaCard.includes("от 450 €"));
+  assert.equal(toledoCard.includes("лично с Евой +50 €"), false);
+  assert.equal(home.includes("лично с Евой +50 €"), false);
+  assert.equal(index.includes("лично с Евой +50 €"), false);
   assert.ok(home.includes('href="/stati/"'));
   assert.equal((home.match(/href="\/poleznoe-dlya-poezdki\/"/g) || []).length, 1);
   assert.ok(madrid.includes('href="/stati/"'));
@@ -484,6 +580,7 @@ await check("tour pages", async () => {
   assert.equal(home.includes('"reviewRating"'), false);
   assert.equal(english.includes("/ekskursii/madrid/"), false);
   assert.equal(english.includes("/ekskursii/toledo/"), false);
+  assert.equal(english.includes("/ekskursii/segovia/"), false);
   for (const file of ["en/index.html", "uk/index.html", "es/index.html"]) {
     const html = file === "en/index.html" ? english : await readFile(path.join(root, file), "utf8");
     assert.equal(html.includes('href="/stati/"'), false, file);
@@ -494,6 +591,7 @@ await check("tour pages", async () => {
 
   assert.ok(index.includes('href="/ekskursii/madrid/"'));
   assert.ok(index.includes('href="/ekskursii/toledo/"'));
+  assert.ok(index.includes('href="/ekskursii/segovia/"'));
   assert.equal(index.includes("hreflang="), false);
   assert.ok(index.includes("по всей Испании"));
   assert.ok(index.includes("Другие города Испании"));
@@ -524,6 +622,8 @@ await check("tour pages", async () => {
   assert.equal(itemList.itemListElement[0].url, "https://spainwitheva.com/ekskursii/madrid/");
   assert.equal(itemList.itemListElement[1].name, "Толедо");
   assert.equal(itemList.itemListElement[1].url, "https://spainwitheva.com/ekskursii/toledo/");
+  assert.equal(itemList.itemListElement[2].name, "Сеговия");
+  assert.equal(itemList.itemListElement[2].url, "https://spainwitheva.com/ekskursii/segovia/");
   assert.ok(itemList.itemListElement.length > 2);
   assert.ok(itemList.itemListElement.some((item) => item.name === "Стадион и музей Real Madrid"));
   assert.equal(home.includes('href="/ekskursii/#'), true);
@@ -557,6 +657,8 @@ await check("article pages", async () => {
   assert.match(article, /<html[^>]*\slang=["']ru["']/i);
   assert.ok(article.includes("<h1>Что посмотреть в Мадриде за 1–2 дня</h1>"));
   assert.ok(article.includes('href="/ekskursii/madrid/"'));
+  assert.ok(article.includes('href="/ekskursii/segovia/"'));
+  assert.equal(article.includes('href="/ekskursii/segovia/" target='), false);
   assert.equal(article.includes('href="/ekskursii/madrid/" target='), false);
   assert.ok(article.includes('href="https://www.parroquiadesantacruz.com/" target="_blank" rel="noopener noreferrer"'));
   assert.ok(article.includes('href="https://www.casaalberto.es/" target="_blank" rel="noopener noreferrer"'));
@@ -865,6 +967,7 @@ await check("page sizes", async () => {
     "ekskursii/index.html",
     "ekskursii/madrid/index.html",
     "ekskursii/toledo/index.html",
+    "ekskursii/segovia/index.html",
     "stati/index.html",
     "stati/chto-posmotret-v-madride-za-1-2-dnya/index.html",
     "stati/chto-posmotret-v-toledo-za-den/index.html",
@@ -907,7 +1010,8 @@ await check("no unfinished placeholders", async () => {
   assert.ok(home.includes("/images/tours/cards/vkusnyj-madrid.webp"));
   assert.ok(home.includes("/images/tours/cards/madrid-v-bokale.webp"));
   assert.ok(home.includes("/images/tours/cards/aristokratichnyj-madrid.webp"));
-  assert.ok(home.includes("/images/tours/cards/segovia-aqueduct.webp"));
+  assert.ok(home.includes("/images/tours/cards/segovia-aqueduct-plaza.webp"));
+  assert.ok(home.includes('alt="Римский акведук на площади в Сеговии"'));
   assert.ok(home.includes("/images/tours/cards/aranjuez-card.webp"));
   assert.ok(home.includes("/images/tours/cards/escorial-card.webp"));
   assert.ok(home.includes('alt="Ева в шляпе перед аркадами Королевского дворца в Аранхуэсе"'));

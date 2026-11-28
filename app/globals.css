@@ -393,7 +393,6 @@ footer > p { justify-self: end; margin: 8px 0; }
 .tour-group > summary .tour-group-title { margin: 0; }
 .tour-group > summary::after { content: ""; width: 9px; height: 9px; border-right: 2px solid var(--wine); border-bottom: 2px solid var(--wine); transform: rotate(45deg); flex: none; margin-top: -4px; }
 .tour-group[open] > summary::after { transform: rotate(-135deg); margin-top: 4px; }
-.tour-group-eva { margin: 0 0 12px; color: #8a6552; font-size: .82rem; }
 .tour-link-grid { display: grid; grid-auto-flow: column; grid-auto-columns: 78%; gap: 12px; overflow-x: auto; overscroll-behavior-inline: contain; scroll-snap-type: x mandatory; padding-bottom: 8px; scrollbar-width: thin; }
 .tour-link-card { position: relative; background: var(--paper); border: 1px solid var(--soft-sand); display: flex; flex-direction: column; min-width: 0; scroll-snap-align: start; }
 .tour-link-media { position: relative; aspect-ratio: 3 / 2; overflow: hidden; background: var(--soft-sand); }
@@ -516,7 +515,7 @@ footer > p { justify-self: end; margin: 8px 0; }
   .tp-bar { grid-template-columns: 1fr auto; align-items: end; }
   .tp-bar .button { width: auto; }
   .tp-film { grid-auto-flow: unset; grid-auto-columns: unset; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); overflow: visible; }
-  .tp-split { grid-template-columns: 1fr 1fr; gap: 28px; }
+  .tp-split:has(> :nth-child(2)) { grid-template-columns: 1fr 1fr; gap: 28px; }
   .tp-eva { grid-template-columns: 140px 1fr; gap: 22px; }
   .tp-eva img { width: 140px; height: 186px; }
 }

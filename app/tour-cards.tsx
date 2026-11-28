@@ -1,7 +1,6 @@
 import { GoogleRatingBadge } from "./review-strip";
 import {
   cardGroups,
-  evaSurcharge,
   otherCitiesNote,
   waLink,
   type TourCardData,
@@ -57,14 +56,11 @@ function TourCard({ card }: { card: TourCardData }) {
 
 function GroupBody({ cards }: { cards: TourCardData[] }) {
   return (
-    <>
-      <p className="tour-group-eva">{evaSurcharge}</p>
-      <div className="tour-link-grid">
-        {cards.map((card) => (
-          <TourCard card={card} key={card.id} />
-        ))}
-      </div>
-    </>
+    <div className="tour-link-grid">
+      {cards.map((card) => (
+        <TourCard card={card} key={card.id} />
+      ))}
+    </div>
   );
 }
 
