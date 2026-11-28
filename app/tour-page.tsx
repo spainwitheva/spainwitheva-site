@@ -71,8 +71,8 @@ export function TourPageView({ tour }: { tour: TourPageData }) {
             Написать в WhatsApp
           </a>
         </div>
-        <p className="tp-note">{privateGroup}</p>
-        <p className="tp-note">{cultureNote}</p>
+        {tour.showPrivateGroup === false ? null : <p className="tp-note">{privateGroup}</p>}
+        {tour.showCultureNote === false ? null : <p className="tp-note">{cultureNote}</p>}
 
         <div className="tp-gallery">
           <Frame photo={tour.hero} eager />

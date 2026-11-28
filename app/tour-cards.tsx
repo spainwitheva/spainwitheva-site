@@ -29,7 +29,7 @@ function CardMedia({ card }: { card: TourCardData }) {
   );
 }
 
-function TourCard({ card }: { card: TourCardData }) {
+function TourCard({ card, surcharge }: { card: TourCardData; surcharge?: boolean }) {
   const href = card.href ?? waLink(card.waText);
   const external = !card.href;
   return (
@@ -41,6 +41,7 @@ function TourCard({ card }: { card: TourCardData }) {
         <h3>{card.title}</h3>
         <p className="tour-link-why">{card.why}</p>
         <p className="tour-link-meta">{card.meta}</p>
+        {surcharge ? <p className="tour-card-eva">{evaSurcharge}</p> : null}
         <a
           className="tour-link-more"
           href={href}
@@ -56,12 +57,17 @@ function TourCard({ card }: { card: TourCardData }) {
 }
 
 function GroupBody({ cards }: { cards: TourCardData[] }) {
+  const sharedSurcharge = cards.every((card) => card.showEvaSurcharge !== false);
   return (
     <>
-      <p className="tour-group-eva">{evaSurcharge}</p>
+      {sharedSurcharge ? <p className="tour-group-eva">{evaSurcharge}</p> : null}
       <div className="tour-link-grid">
         {cards.map((card) => (
-          <TourCard card={card} key={card.id} />
+          <TourCard
+            card={card}
+            key={card.id}
+            surcharge={!sharedSurcharge && card.showEvaSurcharge !== false}
+          />
         ))}
       </div>
     </>

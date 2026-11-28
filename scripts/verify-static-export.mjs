@@ -452,12 +452,22 @@ await check("tour pages", async () => {
   assert.ok(segovia.includes("<h1>Индивидуальная экскурсия в Сеговию из Мадрида на русском</h1>"));
   assert.ok(segovia.includes("от 450 €"));
   assert.equal(segovia.includes("лично с Евой +50 €"), false);
-  assert.equal(segovia.includes("Оплачивается отдельно"), false);
-  assert.ok(segovia.includes("Я, твой персональный гид на русском, и подготовленный маршрут."));
+  assert.ok(segovia.includes("Оплачивается отдельно"));
+  assert.ok(segovia.includes("Я, ваш гид на русском, и подготовленный маршрут."));
+  assert.ok(segovia.includes("Билеты на поезд или трансфер, вход в Алькасар, обед и вино оплачиваются отдельно, за вас и за гида."));
+  assert.ok(segovia.includes("Покажу вам Сеговию сама, на русском."));
+  assert.equal(segovia.includes("тебе"), false);
+  assert.equal(segovia.includes("твой"), false);
+  assert.equal(segovia.includes("Попробуй"), false);
+  assert.ok(segovia.includes(">только ваша компания<"));
+  assert.equal(segovia.includes("Только ваша компания, без чужих людей."), false);
+  assert.equal(segovia.includes("Формат культурный и исторический"), false);
+  assert.equal(segovia.includes("не туристическ"), false);
   assert.ok(segovia.includes("Говорят, этот замок вдохновил Уолта Диснея."));
   assert.ok(segovia.includes("один из лучше всего сохранившихся римских акведуков"));
-  assert.ok(segovia.includes("ресторан моего друга, шефа Оскара"));
-  assert.ok(segovia.includes("кочинильо"));
+  assert.ok(segovia.includes("шефа Оскара, которого знает вся Испания"));
+  assert.equal(segovia.includes("ресторан"), false);
+  assert.ok(segovia.includes("Кочинильо, молочный поросёнок и блюда региона"));
   assert.equal(segovia.includes("крупнейш"), false);
   assert.equal(segovia.includes("самый большой"), false);
   assert.equal(segovia.includes("—"), false);
@@ -480,6 +490,10 @@ await check("tour pages", async () => {
   assert.equal(segoviaProduct.offers["@type"], "Offer");
   assert.equal(segoviaProduct.offers.price, "450");
   assert.equal(segoviaProduct.offers.priceCurrency, "EUR");
+  assert.equal(
+    segoviaProduct.offers.description,
+    "от 450 € за работу гида Евы. Билеты на поезд или трансфер, вход в Алькасар, обед и вино оплачиваются отдельно.",
+  );
   assert.equal(segoviaTrip["@type"], "TouristTrip");
   assert.equal(segoviaTrip.itinerary.itemListElement.length, 6);
   assert.equal(segoviaCrumbs.itemListElement[2].name, "Сеговия");
@@ -491,6 +505,13 @@ await check("tour pages", async () => {
   assert.ok(home.includes('href="/ekskursii/madrid/"'));
   assert.ok(home.includes('href="/ekskursii/toledo/"'));
   assert.ok(home.includes('href="/ekskursii/segovia/"'));
+  const homeCards = [...home.matchAll(/<article class="tour-link-card">([\s\S]*?)<\/article>/g)].map((match) => match[1]);
+  const segoviaCard = homeCards.find((card) => card.includes("<h3>Сеговия</h3>"));
+  const toledoCard = homeCards.find((card) => card.includes("<h3>Толедо</h3>"));
+  assert.ok(segoviaCard, "missing Segovia home card");
+  assert.equal(segoviaCard.includes("лично с Евой +50 €"), false);
+  assert.ok(segoviaCard.includes("от 450 €"));
+  assert.ok(toledoCard.includes("лично с Евой +50 €"));
   assert.ok(home.includes('href="/stati/"'));
   assert.equal((home.match(/href="\/poleznoe-dlya-poezdki\/"/g) || []).length, 1);
   assert.ok(madrid.includes('href="/stati/"'));
