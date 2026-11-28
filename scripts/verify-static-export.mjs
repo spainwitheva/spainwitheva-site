@@ -447,7 +447,8 @@ await check("tour pages", async () => {
   assert.equal(decode(segovia.match(/<title>([^<]*)<\/title>/)[1]), segoviaTitle);
   assert.equal(metaContent(segovia, "description", "name"), "Индивидуальная экскурсия в Сеговию из Мадрида на русском. Выезд в 10:30, обратно в 17:00, от 450 €. Алькасар, средневековые улицы и римский акведук.");
   assert.equal(metaContent(segovia, "og:url", "property"), segoviaCanonical);
-  assert.equal(metaContent(segovia, "og:image", "property"), "https://spainwitheva.com/images/tours/cards/segovia-aqueduct.webp");
+  assert.equal(metaContent(segovia, "og:image", "property"), "https://spainwitheva.com/images/tours/segovia/segovia-eva-alcazar-wall.webp");
+  assert.equal(metaContent(segovia, "og:image:alt", "property"), "Ева на стене Алькасара в Сеговии");
   assert.equal(segovia.includes("hreflang="), false);
   assert.ok(segovia.includes("<h1>Индивидуальная экскурсия в Сеговию из Мадрида на русском</h1>"));
   assert.ok(segovia.includes("от 450 €"));
@@ -478,7 +479,26 @@ await check("tour pages", async () => {
   assert.equal(segovia.includes("Jeyla Huseynova"), false);
   assert.equal(segovia.includes("Elena Shi"), false);
   assert.equal(segovia.includes("★ 5,0"), false);
-  assert.ok(segovia.includes("/images/tours/cards/segovia-aqueduct.webp"));
+  assert.ok(segovia.includes("/images/tours/segovia/segovia-eva-alcazar-wall.webp"));
+  assert.ok(segovia.includes('alt="Ева на стене Алькасара в Сеговии"'));
+  const heroTag = segovia.match(/<img\b[^>]*src="\/images\/tours\/segovia\/segovia-eva-alcazar-wall.webp"[^>]*>/);
+  assert.ok(heroTag, "missing hero img");
+  assert.match(heroTag[0], /loading="eager"/);
+  assert.match(heroTag[0], /object-position:\s*center 40%/);
+  for (const src of [
+    "/images/tours/segovia/segovia-aqueduct-arches.webp",
+    "/images/tours/segovia/segovia-aqueduct-plaza.webp",
+    "/images/tours/segovia/segovia-alcazar-hill.webp",
+    "/images/tours/segovia/segovia-eva-alcazar-battlements.webp",
+    "/images/tours/segovia/segovia-chef-oscar-cochinillo.webp",
+    "/images/tours/segovia/segovia-eva-lunch-wine.webp",
+    "/images/tours/segovia/segovia-group-alcazar.webp",
+  ]) {
+    const tag = segovia.match(new RegExp(`<img\\b[^>]*src="${src}"[^>]*>`));
+    assert.ok(tag, src);
+    assert.match(tag[0], /loading="lazy"/);
+  }
+  assert.equal(segovia.includes("/images/tours/cards/segovia-aqueduct.webp"), false);
   assert.ok(segovia.includes("/images/eva/portrait.webp"));
   const segoviaLd = jsonLdBlocks(segovia).find((block) => Array.isArray(block["@graph"]));
   assertNoReviewMarkup(segoviaLd, "segovia");
@@ -495,6 +515,8 @@ await check("tour pages", async () => {
     "от 450 € за работу гида Евы. Билеты на поезд или трансфер, вход в Алькасар, обед и вино оплачиваются отдельно.",
   );
   assert.equal(segoviaTrip["@type"], "TouristTrip");
+  assert.equal(segoviaTrip.image, "https://spainwitheva.com/images/tours/segovia/segovia-eva-alcazar-wall.webp");
+  assert.equal(segoviaProduct.image, segoviaTrip.image);
   assert.equal(segoviaTrip.itinerary.itemListElement.length, 6);
   assert.equal(segoviaCrumbs.itemListElement[2].name, "Сеговия");
   assert.equal(segoviaCrumbs.itemListElement[2].item, segoviaCanonical);
@@ -984,7 +1006,8 @@ await check("no unfinished placeholders", async () => {
   assert.ok(home.includes("/images/tours/cards/vkusnyj-madrid.webp"));
   assert.ok(home.includes("/images/tours/cards/madrid-v-bokale.webp"));
   assert.ok(home.includes("/images/tours/cards/aristokratichnyj-madrid.webp"));
-  assert.ok(home.includes("/images/tours/cards/segovia-aqueduct.webp"));
+  assert.ok(home.includes("/images/tours/cards/segovia-aqueduct-plaza.webp"));
+  assert.ok(home.includes('alt="Римский акведук на площади в Сеговии"'));
   assert.ok(home.includes("/images/tours/cards/aranjuez-card.webp"));
   assert.ok(home.includes("/images/tours/cards/escorial-card.webp"));
   assert.ok(home.includes('alt="Ева в шляпе перед аркадами Королевского дворца в Аранхуэсе"'));

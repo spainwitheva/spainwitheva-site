@@ -98,33 +98,36 @@ export function tourJsonLd(tour: TourPageData) {
   };
   if (tour.schemaImage) product.image = tour.schemaImage;
 
+  const trip: Record<string, unknown> = {
+    "@type": "TouristTrip",
+    name: tour.h1,
+    description: tour.metaDescription,
+    url,
+    touristType: "Индивидуальная экскурсия",
+    availableLanguage: guideLanguages,
+    provider: {
+      "@type": "TravelAgency",
+      name: "SpainWithEva",
+      url: `${SITE_ORIGIN}/`,
+      telephone: "+34 684 76 20 85",
+      availableLanguage: guideLanguages,
+    },
+    itinerary: {
+      "@type": "ItemList",
+      itemListElement: tour.sees.map((name, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name,
+      })),
+    },
+  };
+  if (tour.schemaImage) trip.image = tour.schemaImage;
+
   return {
     "@context": "https://schema.org",
     "@graph": [
       product,
-      {
-        "@type": "TouristTrip",
-        name: tour.h1,
-        description: tour.metaDescription,
-        url,
-        touristType: "Индивидуальная экскурсия",
-        availableLanguage: guideLanguages,
-        provider: {
-          "@type": "TravelAgency",
-          name: "SpainWithEva",
-          url: `${SITE_ORIGIN}/`,
-          telephone: "+34 684 76 20 85",
-          availableLanguage: guideLanguages,
-        },
-        itinerary: {
-          "@type": "ItemList",
-          itemListElement: tour.sees.map((name, index) => ({
-            "@type": "ListItem",
-            position: index + 1,
-            name,
-          })),
-        },
-      },
+      trip,
       {
         "@type": "BreadcrumbList",
         itemListElement: [
