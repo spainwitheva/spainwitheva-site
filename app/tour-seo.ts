@@ -43,7 +43,7 @@ export function tourMetadata(tour: TourPageData): Metadata {
 export function indexMetadata(): Metadata {
   const title = "Экскурсии по Мадриду и поездки из Мадрида с русскоязычным гидом | SpainWithEva";
   const description =
-    "Индивидуальные экскурсии с гидом SpainWithEva по всей Испании на русском, украинском или английском: Душевный Мадрид от 200 €, Толедо от 450 € плюс билеты на поезд.";
+    "Индивидуальные экскурсии с гидом SpainWithEva по всей Испании на русском, украинском или английском: Душевный Мадрид от 200 €, Толедо от 450 € плюс билеты на поезд, Сеговия от 450 €.";
   const url = `${SITE_ORIGIN}/ekskursii/`;
   const image = "https://spainwitheva.com/images/hero-eva-madrid.webp";
 
@@ -165,9 +165,15 @@ export function indexJsonLd() {
             name: "Толедо",
             url: `${SITE_ORIGIN}/ekskursii/toledo/`,
           },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: "Сеговия",
+            url: `${SITE_ORIGIN}/ekskursii/segovia/`,
+          },
           ...catalogAdditions.map((item, index) => ({
             "@type": "ListItem",
-            position: index + 3,
+            position: index + 4,
             name: item.title,
             url: `${SITE_ORIGIN}/ekskursii/#${item.id}`,
           })),

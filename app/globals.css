@@ -516,7 +516,7 @@ footer > p { justify-self: end; margin: 8px 0; }
   .tp-bar { grid-template-columns: 1fr auto; align-items: end; }
   .tp-bar .button { width: auto; }
   .tp-film { grid-auto-flow: unset; grid-auto-columns: unset; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); overflow: visible; }
-  .tp-split { grid-template-columns: 1fr 1fr; gap: 28px; }
+  .tp-split:has(> :nth-child(2)) { grid-template-columns: 1fr 1fr; gap: 28px; }
   .tp-eva { grid-template-columns: 140px 1fr; gap: 22px; }
   .tp-eva img { width: 140px; height: 186px; }
 }

@@ -88,6 +88,15 @@ export type TourPageData = {
   group: string;
   priceLabel: string;
   priceAmount: string;
+  /** When false, the shared «лично с Евой +50 €» line is not shown. */
+  showEvaSurcharge?: boolean;
+  /** Overrides the shared «Входит» line. */
+  includes?: string;
+  /**
+   * Overrides «Оплачивается отдельно».
+   * false hides that column when it is not yet known what guests pay themselves.
+   */
+  paidSeparately?: string | false;
   offerDescription: string;
   metaTitle: string;
   metaDescription: string;
@@ -105,12 +114,14 @@ export type TourPageData = {
   formats?: FormatLine[];
   extras?: string;
   evaLines: string[];
-  quote: TourQuote;
+  /** Absent when this tour has no confirmed guest quote. */
+  quote?: TourQuote;
   related: Array<{ href: string; title: string; meta: string }>;
 };
 
 const madridWa = "Привет! Хочу индивидуальную экскурсию «Душевный Мадрид». Дата: , нас будет: ";
 const toledoWa = "Привет! Хочу индивидуальную экскурсию в Толедо из Мадрида. Дата: , нас будет: ";
+const segoviaWa = "Привет! Хочу индивидуальную экскурсию в Сеговию из Мадрида. Дата: , нас будет: ";
 
 function formatWa(title: string) {
   return `Привет! Хочу экскурсию «${title}». Дата: , нас будет: `;
@@ -252,6 +263,11 @@ export const tourPages: TourPageData[] = [
         title: "Толедо",
         meta: "полный день · от 450 € + билеты на поезд",
       },
+      {
+        href: "/ekskursii/segovia/",
+        title: "Сеговия",
+        meta: "выезд 10:30 · от 450 €",
+      },
     ],
   },
   {
@@ -354,6 +370,103 @@ export const tourPages: TourPageData[] = [
         title: "Душевный Мадрид",
         meta: "около 3 часов · от 200 €",
       },
+      {
+        href: "/ekskursii/segovia/",
+        title: "Сеговия",
+        meta: "выезд 10:30 · от 450 €",
+      },
+    ],
+  },
+  {
+    slug: "segovia",
+    path: "/ekskursii/segovia/",
+    crumb: "Сеговия",
+    h1: "Индивидуальная экскурсия в Сеговию из Мадрида на русском",
+    evaLine: "Покажу тебе Сеговию сама, на русском. Выезд в 10:30, к 17:00 вернёмся в Мадрид.",
+    cardTitle: "Сеговия",
+    duration: "выезд в 10:30, обратно в 17:00",
+    group: "только ваша компания",
+    priceLabel: "от 450 €",
+    priceAmount: "450",
+    // The shared «лично с Евой +50 €» line is a team-guide surcharge.
+    // This page is priced only as «от 450 €», with Eva herself in the included line.
+    showEvaSurcharge: false,
+    // TODO: обед, вино, входные билеты и проезд. Не писать, входят они в «от 450 €»
+    // или оплачиваются отдельно, пока владелец не подтвердит. В «Входит» только то,
+    // что уже точно: Ева как персональный русскоязычный гид и маршрут.
+    includes: "Я, твой персональный гид на русском, и подготовленный маршрут.",
+    paidSeparately: false,
+    offerDescription: "от 450 €. Индивидуальная экскурсия в Сеговию из Мадрида с Евой, русскоязычным гидом.",
+    metaTitle: "Индивидуальная экскурсия в Сеговию из Мадрида на русском | SpainWithEva",
+    metaDescription:
+      "Индивидуальная экскурсия в Сеговию из Мадрида на русском. Выезд в 10:30, обратно в 17:00, от 450 €. Алькасар, средневековые улицы и римский акведук.",
+    // TODO(photos): нужен комплект кадров Сеговии: акведук, Алькасар, средневековые улицы,
+    // обед, Ева с гостями. Сток и фото других городов не подставлять.
+    // Пока на странице единственное фото Сеговии в репозитории: гости у акведука,
+    // public/images/tours/cards/segovia-aqueduct.webp.
+    ogImage: "https://spainwitheva.com/images/tours/cards/segovia-aqueduct.webp",
+    ogImageAlt: "Гости экскурсии у римского акведука в Сеговии",
+    schemaImage: "https://spainwitheva.com/images/tours/cards/segovia-aqueduct.webp",
+    waText: segoviaWa,
+    hero: {
+      src: "/images/tours/cards/segovia-aqueduct.webp",
+      alt: "Гости экскурсии у римского акведука в Сеговии",
+      width: 800,
+      height: 1422,
+      position: "center 42%",
+    },
+    photos: [],
+    sees: [
+      "Алькасар",
+      "Средневековые улицы",
+      "Римский акведук",
+      "Обед у шефа Оскара",
+      "Молочный поросёнок и блюда региона",
+      "Вино с винодельни Оскара",
+    ],
+    how: [
+      "Выезжаем из Мадрида в 10:30 и в 17:00 возвращаемся.",
+      "Сеговия к северу от Мадрида. Едем на комфортном скоростном поезде, около 30 минут в одну сторону. Если удобнее с водителем, организую индивидуальный трансфер.",
+      "Покажу Алькасар. Говорят, этот замок вдохновил Уолта Диснея. Пройдём средневековые улицы, где работала инквизиция и где начиналась современная Испания: здесь провозгласили королевой Изабеллу.",
+      "У римского акведука остановимся подольше. Это один из лучше всего сохранившихся римских акведуков.",
+      "На обед веду в ресторан моего друга, шефа Оскара. Его знают по всей Испании. Попробуй кочинильо, молочного поросёнка и другие блюда региона, а к ним вино с его собственной винодельни.",
+      "Так я показываю не туристическую Испанию.",
+      meetingAnswer,
+    ],
+    faqs: [
+      {
+        question: "Сколько стоит и что входит в цену?",
+        answer: "От 450 €. В цену вхожу я, твой персональный гид на русском, и подготовленный маршрут.",
+      },
+      {
+        question: "Как добираемся и во сколько обратно?",
+        answer:
+          "Сеговия к северу от Мадрида. На комфортном скоростном поезде около 30 минут в одну сторону. Если удобнее с водителем, организую индивидуальный трансфер. Выезжаем в 10:30, в Мадрид возвращаемся в 17:00.",
+      },
+      {
+        question: bookingTerms.faqQuestion,
+        answer: bookingTerms.faqAnswer,
+      },
+      {
+        question: "Где встречаемся?",
+        answer: meetingAnswer,
+      },
+    ],
+    evaLines: [
+      "Я Ева, живу в Мадриде и этот выезд в Сеговию веду сама.",
+      "На русском и без туристической Испании.",
+    ],
+    related: [
+      {
+        href: "/ekskursii/toledo/",
+        title: "Толедо",
+        meta: "полный день · от 450 € + билеты на поезд",
+      },
+      {
+        href: "/ekskursii/madrid/",
+        title: "Душевный Мадрид",
+        meta: "около 3 часов · от 200 €",
+      },
     ],
   },
 ];
@@ -364,6 +477,7 @@ export function getTour(slug: string) {
 
 const soulful = tourPages[0];
 const toledo = tourPages[1];
+const segovia = tourPages[2];
 
 export const cardGroups: Array<{ title: string; cards: TourCardData[] }> = [
   {
@@ -451,16 +565,14 @@ export const cardGroups: Array<{ title: string; cards: TourCardData[] }> = [
       {
         id: "segovia",
         title: "Сеговия",
-        why: "Акведук, королевский Алькасар и старый город.",
-        meta: "полный день · от 450 € + билеты на поезд",
-        photo: {
-          src: "/images/tours/cards/segovia-aqueduct.webp",
-          alt: "Гости экскурсии у римского акведука в Сеговии",
-          width: 800,
-          height: 1422,
-          position: "center 46%",
-        },
-        waText: formatWa("Сеговия"),
+        // TODO: the home group «Поездки из Мадрида» still prints the shared
+        // «лично с Евой +50 €» above every card in that group, including this one.
+        // The Segovia page itself does not. Confirm whether that group line should skip Segovia.
+        why: "Алькасар, средневековые улицы и римский акведук.",
+        meta: "выезд 10:30 · от 450 €",
+        photo: segovia.hero,
+        href: segovia.path,
+        waText: segoviaWa,
       },
       {
         id: "aranjuez",
